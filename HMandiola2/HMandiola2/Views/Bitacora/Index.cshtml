@@ -1,0 +1,102 @@
+﻿<body background="http://paperlief.com/images/turquoise-color-wallpaper-2.jpg">
+    <div id="filtro">
+        <h6>
+            Filtros
+        </h6>
+        <div class="row">
+            <div class="form-group col-lg-6">
+                <label for="usuario">Usuario</label>
+                <input type="text" class="form-control" id="usuario" placeholder="Usuario">
+            </div>
+            <div class="form-group col-lg-6">
+                <label for="tipo">Tipo</label>
+                <select class="form-control" id="tipo">
+                    <option value="0">Seleccione</option>
+                    <option value="Agregar">Agregar</option>
+                    <option value="Eliminar">Eliminar</option>
+                    <option value="Modificar">Modificar</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-lg-6">
+                <label>Fecha Inicial</label>
+                <div class='input-group date'>
+                    <input type='text' class="form-control" id='dtpFechaInicio' placeholder="mm/dd/yyyy" />
+                </div>
+            </div>
+            <div class="form-group col-lg-6">
+                <label>Fecha Final</label>
+                <div class='input-group date'>
+                    <input type='text' class="form-control" id="dtpFechaFinal" placeholder="mm/dd/yyyy" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <input class="btn btn-primary" type="button" value="Filtrar" onclick="Filtrar()" />
+        </div>
+    </div>
+    <br />
+    <div class="row" id="here_table"></div>
+</body>
+    <script>
+
+
+    function Filtrar() {
+        var usuario = $("#usuario").val();
+        var fechaInicio = $("#dtpFechaInicio").val();
+        var fechaFinal = $("#dtpFechaFinal").val();
+        var tipo = $("#tipo").val();
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("filtrar", "Bitacora")' + '?usuario=' + usuario + '&fechaInicio=' + fechaInicio + '&fechaFinal=' + fechaFinal +'&tipo=' + tipo,
+            processData: false,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                if (response.Success == true) {
+
+                    var content = "<table class='table'>";
+                    content += "<thead class='thead-dark'>";
+                    content += "<tr>";
+                    content += "<th>Código Registro</th>";
+                    content += "<th>Fecha</th>";
+                    content += "<th>Descripción</th>";
+                    content += "</tr>";
+                    content += "</thead>";
+                    content += "<tbody>";
+
+                    if (response.Data.length == 0) {
+                        content += '<td>No se encontraron registros con el filtro seleccionado.</td>';
+                    }
+
+                    for (var x = 0; x < response.Data.length; x++) {
+                        content += '<tr>';
+                        content += '<td>' + response.Data[x].ID_Registro + '</td>';
+                        content += '<td>' + response.Data[x].Fecha + '</td>';
+                        content += '<td>' + response.Data[x].Descripcion + '</td>';
+                        content += '</tr>';
+                    }
+                    content += "</tbody>";
+                    content += "</table>"
+
+                    $(".table").remove();
+
+                    $('#here_table').append(content);
+
+                } else {
+                    alert('Ha ocurrido un problema, intentalo mas tarde!!');
+                    guardarError(response);
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert('Error!!');
+                guardarError(xhr.responseText);
+            }
+    });
+    }
+    </script>
+

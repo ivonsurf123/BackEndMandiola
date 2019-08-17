@@ -1,0 +1,62 @@
+﻿<body background="https://www.barcelo.com/es/images/96-swimming-pool-17-hotel-barcelo-tambor-beach_tcm7-43418.jpg">
+    <div align="center">
+        <div class="container divForm col-md-offset-4 col-md-5 text-center mediumContainer">
+            <div class="row ">
+                <div class="col-lg-8 col-lg-offset-2 text-center">
+                    <h1>
+                        <bold>
+                            Login
+                        </bold>
+                    </h1>
+                </div>
+                <div class="col-md-10 col-md-offset-1 text-left ">
+                    <h3>
+                        Correo
+                    </h3>
+                    <input type="email" class="form-control col-lg-12 col-md-12 col-xs-12" id="correo" aria-describedby="email" placeholder="Ingresar correo">
+                    <h3>
+                        Contraseña
+                    </h3>
+                    <input type="password" class="form-control col-lg-12 col-md-12 col-xs-12" id="contrasena" placeholder="Contraseña">
+                    <br>
+                    <button type="submit" id="loginButton" name="loginButton" value="loginButton"
+                            class="btn btn-info btn-xl col-lg-12 col-md-12 col-xs-12">
+                        Ingresar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+    <script>
+
+    // Evento que envía una petición Ajax al servidor
+    $('#loginButton').click(function (e) {
+
+        var usuario = {
+            Correo: $('#correo').val(),
+            Contrasena: $('#contrasena').val()
+        };
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Login", "Login")',
+        processData: false,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        data: JSON.stringify(usuario),
+        success: function (response) {
+            if (response.Success == true) {
+                location.href = "@Url.Action("Index", "Core")";
+            }else {
+                alert('Ha ocurrido un problema, intentalo mas tarde!!');
+            }
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            alert('Error!!');
+            guardarError(xhr.responseText);
+        }
+    });
+});
+
+    </script>

@@ -1,0 +1,121 @@
+﻿<body background="http://paperlief.com/images/turquoise-color-wallpaper-2.jpg">
+    <div id="filtro">
+        <h6>
+            Tipo Cliente
+        </h6>
+        <select id="tipo" class="form-control col-lg-12 col-md-12 col-xs-12" onchange="Filtrar()">
+            <option value="N">Nacional</option>
+            <option value="E">Extranjero</option>
+        </select>
+        <br />
+    </div>
+    <div id="here_table"></div>
+</body>
+    <script>
+
+
+         $.ajax({
+            type: "GET",
+            url: '@Url.Action("devuelveClientes", "ClientesActivos")',
+            processData: false,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                if (response.Success == true) {
+
+                    var content = "<table class='table'>";
+                    content += "<thead class='thead-dark'>";
+                    content += "<tr>";
+                    content += "<th>Cédula</th>";
+                    content += "<th>Nombre</th>";
+                    content += "<th>PrimerApellido</th>";
+                    content += "<th>SegundoApellido</th>";
+                    content += "<th>Número Habitación</th>";
+                    content += "</tr>";
+                    content += "</thead>";
+                    content += "<tbody>";
+
+                    for (var x = 0; x < response.Data.length; x++) {
+                        content += '<tr>';
+                        content += '<td>' + response.Data[x].Cedula + '</td>';
+                        content += '<td>' + response.Data[x].Nombre + '</td>';
+                        content += '<td>' + response.Data[x].PrimerApellido + '</td>';
+                        content += '<td>' + response.Data[x].SegundoApellido + '</td>';
+                        content += '<td>' + response.Data[x].IdHabitacion + '</td>';
+                        content += '</tr>';
+                    }
+                    content += "</tbody>";
+                    content += "</table>"
+
+                    $('#here_table').append(content);
+
+                } else {
+                    alert('Ha ocurrido un problema, intentalo mas tarde!!');
+                    guardarError(response);
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert('Error!!');
+                guardarError(xhr.responseText);
+            }
+    });
+
+
+
+    </script>
+    <script>
+    function Filtrar() {
+        var tipo = $("#tipo").val();
+
+         $.ajax({
+            type: "GET",
+            url: '@Url.Action("devuelveClientes", "ClientesActivos")' + '?tipo=' + tipo,
+            processData: false,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                if (response.Success == true) {
+
+                    var content = "<table class='table'>";
+                    content += "<thead class='thead-dark'>";
+                    content += "<tr>";
+                    content += "<th>Cédula</th>";
+                    content += "<th>Nombre</th>";
+                    content += "<th>PrimerApellido</th>";
+                    content += "<th>SegundoApellido</th>";
+                    content += "<th>Número Habitación</th>";
+                    content += "</tr>";
+                    content += "</thead>";
+                    content += "<tbody>";
+
+                    for (var x = 0; x < response.Data.length; x++) {
+                        content += '<tr>';
+                        content += '<td>' + response.Data[x].Cedula + '</td>';
+                        content += '<td>' + response.Data[x].Nombre + '</td>';
+                        content += '<td>' + response.Data[x].PrimerApellido + '</td>';
+                        content += '<td>' + response.Data[x].SegundoApellido + '</td>';
+                        content += '<td>' + response.Data[x].IdHabitacion + '</td>';
+                        content += '</tr>';
+                    }
+                    content += "</tbody>";
+                    content += "</table>"
+
+                    $(".table").remove();
+
+                    $('#here_table').append(content);
+
+                } else {
+                    alert('Ha ocurrido un problema, intentalo mas tarde!!');
+                    guardarError(response);
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert('Error!!');
+                guardarError(xhr.responseText);
+            }
+    });
+    }
+    </script>
+

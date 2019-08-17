@@ -1,0 +1,260 @@
+﻿@{
+    ViewBag.Title = "VerUsuarios";
+}
+<body background="http://paperlief.com/images/turquoise-color-wallpaper-2.jpg">
+    <div id="here_table"></div>
+    <div>
+        <!-- Administrador -->
+        <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="administradorCheckBox">
+            <label class="custom-control-label" for="administradorCheckBox">Administrador</label>
+        </div>
+        <!-- Seguridad -->
+        <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="seguridadCheckBox">
+            <label class="custom-control-label" for="seguridadCheckBox">Seguridad</label>
+        </div>
+        <!-- Consecutivo -->
+        <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="consecutivoCheckBox">
+            <label class="custom-control-label" for="consecutivoCheckBox">Consecutivo</label>
+        </div>
+        <!-- Mantenimiento -->
+        <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="mantenimientoCheckBox">
+            <label class="custom-control-label" for="mantenimientoCheckBox">Mantenimiento</label>
+        </div>
+        <!-- Consulta -->
+        <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="consultaCheckBox">
+            <label class="custom-control-label" for="consultaCheckBox">Consulta</label>
+        </div>
+    </div>
+    <div>
+        <button id="buttonRoles" name="buttonRoles" type="button" class="btn btn-info">Actualizar Roles</button>
+    </div>
+    <input type="hidden" id="cedulaoculta" name="cedulaoculta" value="">
+</body>
+    <script>
+
+    $("#buttonRoles").hide();
+
+    $('#here_table').on('click', 'tbody tr', function (event) {
+        $(this).addClass('highlight').siblings().removeClass('highlight');
+        $("#buttonRoles").show();
+    });
+
+    $("#buttonRoles").click(function () {
+
+        var arrayRoles = [];
+        if (document.getElementById("administradorCheckBox").checked) {
+            arrayRoles.push(document.getElementById("administradorCheckBox").value);
+        }
+        if (document.getElementById("seguridadCheckBox").checked) {
+            arrayRoles.push(document.getElementById("seguridadCheckBox").value);
+        }
+        if (document.getElementById("consecutivoCheckBox").checked) {
+            arrayRoles.push(document.getElementById("consecutivoCheckBox").value);
+        }
+        if (document.getElementById("consultaCheckBox").checked) {
+            arrayRoles.push(document.getElementById("consultaCheckBox").value);
+        }
+        if (document.getElementById("mantenimientoCheckBox").checked) {
+            arrayRoles.push(document.getElementById("mantenimientoCheckBox").value);
+        }
+
+        var isSuccess = false;
+
+
+        var rol_Usuario_eliminar = {
+            Usuario_Cedula: $("#cedulaoculta").val()
+        };
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("eliminarRolesDeUsuario", "Seguridad")',
+                processData: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify(rol_Usuario_eliminar),
+                success: function (response) {},
+                error: function (xhr, textStatus, errorThrown) {}
+            });
+
+
+        for (var x = 0; x < arrayRoles.length; x++) {
+
+            var rol = arrayRoles[x];
+
+            var rol_Usuario = {
+                Usuario_Cedula: $("#cedulaoculta").val(),
+                Rol_ID_Rol: rol
+            };
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("insertaRolesPorUsuario", "Seguridad")',
+                processData: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify(rol_Usuario),
+                success: function (response) {
+                    if (response.Success == true) {
+                        isSuccess = true;
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                   // alert('Error!!');
+                    guardarError(xhr.responseText);
+                }
+            });
+        }
+
+        if (isSuccess) {
+            alert('Roles insertados correctamente');
+        }
+    });
+
+    function clicRow(cedula) {
+
+        document.getElementById("administradorCheckBox").checked = false;
+        document.getElementById("seguridadCheckBox").checked = false;
+        document.getElementById("consecutivoCheckBox").checked = false;
+        document.getElementById("mantenimientoCheckBox").checked = false;
+        document.getElementById("consultaCheckBox").checked = false;
+
+
+        var cedulaoculta = $('input[name="cedulaoculta"]:hidden');
+        cedulaoculta.val(cedula);
+
+             var rol_Usuario = {
+                 Usuario_Cedula: cedula
+             };
+
+             $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("devuelveRolesPorUsuario", "Seguridad")',
+                    processData: false,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: JSON.stringify(rol_Usuario),
+                    success: function (response) {
+
+                    if (response.Success == true) {
+                        for (var x = 0; x < response.Data.length; x++) {
+
+                            if (response.Data[x].Descripcion == "Administrador") {
+                                document.getElementById("administradorCheckBox").checked = true;
+
+                            } else if (response.Data[x].Descripcion == "Seguridad") {
+                                document.getElementById("seguridadCheckBox").checked = true;
+
+                            } else if (response.Data[x].Descripcion == "Consecutivo") {
+                                document.getElementById("consecutivoCheckBox").checked = true
+
+                            } else if (response.Data[x].Descripcion == "Mantenimiento") {
+                                document.getElementById("mantenimientoCheckBox").checked = true;
+
+                            } else if (response.Data[x].Descripcion == "Consulta") {
+                                document.getElementById("consultaCheckBox").checked = true;
+                            }
+                        }
+                    }else {
+                        alert('Ha ocurrido un problema, intentalo mas tarde!!');
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    alert('Error!!');
+                    guardarError(xhr.responseText);
+                }
+            });
+        }
+
+
+         $.ajax({
+            type: "GET",
+            url: '@Url.Action("devuelveUsuarios", "Seguridad")',
+            processData: false,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                if (response.Success == true) {
+
+                    var content = "<table class='table'>";
+                    content += "<thead class='thead-dark'>";
+                    content += "<tr>";
+                    content += "<th>Cedula</th>";
+                    content += "<th>Nombre</th>";
+                    content += "<th>Correo</th>";
+                    content += "</tr>";
+                    content += "</thead>";
+                    content += "<tbody>";
+
+                    for (var x = 0; x < response.Data.length; x++) {
+                        content += '<tr class="clickableRow" onclick="clicRow(' + response.Data[x].Cedula + ')">';
+                        content += '<td>' + response.Data[x].Cedula + '</td>';
+                        content += '<td>' + response.Data[x].Nombre + " " + response.Data[x].PrimerApellido + " " + response.Data[x].SegundoApellido + '</td>';
+                        content += '<td>' + response.Data[x].Correo + '</td>';
+                        content += '</tr>';
+                    }
+                    content += "</tbody>";
+                    content += "</table>"
+
+                    $('#here_table').append(content);
+
+                } else {
+                    alert('Ha ocurrido un problema, intentalo mas tarde!!');
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert('Error!!');
+            }
+    });
+
+
+
+
+
+     $.ajax({
+            type: "GET",
+            url: '@Url.Action("devuelveIdRoles", "Seguridad")',
+            processData: false,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                if (response.Success == true) {
+
+                    for (var x = 0; x < response.Data.length; x++) {
+
+                        if (response.Data[x].Descripcion == "Administrador") {
+                            document.getElementById("administradorCheckBox").value = response.Data[x].ID_Rol;
+                        }
+
+                        if (response.Data[x].Descripcion == "Seguridad") {
+                            document.getElementById("seguridadCheckBox").value = response.Data[x].ID_Rol;
+                        }
+
+                        if (response.Data[x].Descripcion == "Consecutivo") {
+                            document.getElementById("consecutivoCheckBox").value = response.Data[x].ID_Rol;
+                        }
+
+                        if (response.Data[x].Descripcion == "Mantenimiento") {
+                            document.getElementById("mantenimientoCheckBox").value = response.Data[x].ID_Rol;
+                        }
+
+                        if (response.Data[x].Descripcion == "Consulta") {
+                            document.getElementById("consultaCheckBox").value = response.Data[x].ID_Rol;
+                        }
+                    }
+
+                } else {
+                    alert('Ha ocurrido un problema, intentalo mas tarde!!');
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert('Error!!');
+            }
+     });
+
+    </script>

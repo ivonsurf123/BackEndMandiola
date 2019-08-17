@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewBag.Title = "View";
+}
+<body background="http://paperlief.com/images/turquoise-color-wallpaper-2.jpg">
+    <div id="here_table"></div>
+    <div>
+        <button id="buttonNuevoConsecutivo" name="buttonNuevoConsecutivo" type="button" class="btn btn-info">Nuevo consecutivo</button>
+    </div>
+</body>
+<script>
+
+    $('#buttonNuevoConsecutivo').click(function (e) {
+           location.href = "@Url.Action("ConsecutivoPage", "Consecutivos")";
+    });
+
+         $.ajax({
+            type: "GET",
+            url: '@Url.Action("devuelveConsecutivos", "Consecutivos")',
+            processData: false,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                if (response.Success == true) {
+
+                    var content = "<table class='table'>";
+                    content += "<thead class='thead-dark'>";
+                    content += "<tr>";
+                    content += "<th>Codigo</th>";
+                    content += "<th>Descripcion</th>";
+                    content += "<th>Consecutivo</th>";
+                    content += "<th></th>";
+                    content += "<th></th>";
+                    content += "</tr>";
+                    content += "</thead>";
+                    content += "<tbody>";
+
+                    for (var x = 0; x < response.Data.length; x++) {
+                        content += '<tr class="clickableRow" onclick="clicRow(' + response.Data[x].Cedula + ')">';
+                        content += '<td>' + response.Data[x].ID_Consecutivo + '</td>';
+                        content += '<td>' + response.Data[x].Descripcion + '</td>';
+                        content += '<td>' + response.Data[x].Num_Consecutivo + '</td>';
+                        content += '<td><a href="/Consecutivos/ConsecutivoPage?consecutivo_id=' + response.Data[x].ID_Consecutivo + '">Editar</a></td>';
+                        content += '<td><a href="/Consecutivos/Borrar?consecutivo_id=' + response.Data[x].ID_Consecutivo + '">Eliminar</a></td>';
+                        content += '</tr>';
+                    }
+                    content += "</tbody>";
+                    content += "</table>"
+
+                    $('#here_table').append(content);
+
+                } else {
+                    alert('Ha ocurrido un problema, intentalo mas tarde!!');
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                guardarError(xhr.responseText);
+            }
+    });
+
+
+
+</script>

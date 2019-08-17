@@ -1,0 +1,251 @@
+﻿<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Responsive sidebar template with sliding effect and dropdown menu based on bootstrap 3">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/Assets/css/menulateral.css">
+</head>
+<body>
+    @{
+        HMandiola2.Data.sproc_hoteles_LoginUsuario_Result usuario =
+            (HMandiola2.Data.sproc_hoteles_LoginUsuario_Result)System.Web.HttpContext.Current.Session["usuarioLogueado"];
+    }
+    <div class="page-wrapper chiller-theme toggled">
+        <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+            <i class="fas fa-bars"></i>
+        </a>
+        <nav id="sidebar" class="sidebar-wrapper">
+            <div class="sidebar-content">
+                <div class="sidebar-brand">
+                    <a href="#">Hotel Mandiola</a>
+                    <div id="close-sidebar">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+                <div class="sidebar-header">
+                    <div class="user-info">
+                        <span class="user-name">
+                            @usuario.nombre
+                            <strong>@usuario.primerApellido @usuario.segundoApellido</strong>
+                        </span>
+                        <span class="user-role">Administrator</span>
+                        <span class="user-status">
+                            <i class="fa fa-circle"></i>
+                            <span>Online</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="sidebar-menu">
+                    <ul>
+                        <li class="header-menu">
+                            <span>Seguridad</span>
+                        </li>
+                        @if (Html.MostrarOpcion("menu", "usuario"))
+                        {
+                            <li class="sidebar-dropdown">
+                                <a href="#">
+                                    <i class="fa fa-users"></i>
+                                    <span>Usuarios</span>
+                                </a>
+                                <div class="sidebar-submenu">
+                                    <ul>
+                                        @if (Html.MostrarOpcion("crear", "usuario", "seguridad"))
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("CrearUsuario", "Seguridad")">Crear usuario</a>
+                                            </li>
+                                        }
+                                        @if (Html.MostrarOpcion("consulta", "usuario", "seguridad"))
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("VerUsuarios", "Seguridad")">Ver usuarios</a>
+                                            </li>
+                                        }
+                                        @if (Html.MostrarOpcion("crear", "usuario", "seguridad"))
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("CambiarContrasenia", "Seguridad")">Cambiar Contraseña</a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </li>
+                        }
+                        @if (Html.MostrarOpcion("menu", "admin"))
+                        {
+                            <li class="sidebar-dropdown">
+                                <a href="#">
+                                    <i class="fa fa-cog"></i>
+                                    <span>Administracion</span>
+                                </a>
+                                <div class="sidebar-submenu">
+                                    <ul>
+                                        @if (Html.MostrarOpcion("submenu", "admin", "consecutivo"))
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("Index", "Consecutivos")">
+                                                    Consecutivos
+                                                </a>
+                                            </li>
+                                        }
+                                        @if (Html.MostrarOpcion("submenu", "admin", "actividad"))
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("Index", "Actividad")">
+                                                    Actividades
+                                                </a>
+                                            </li>
+                                        }
+                                        @if (Html.MostrarOpcion("submenu", "admin", "articulo"))
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("Index", "Articulo")">
+                                                    Articulos
+                                                </a>
+                                            </li>
+                                        }
+                                        @if (Html.MostrarOpcion("submenu", "admin", "habitaciones"))
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("Index", "Habitaciones")">
+                                                    Habitacion
+                                                </a>
+                                            </li>
+                                        }
+                                        @if (Html.MostrarOpcion("submenu", "admin", "precio"))
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("Index", "Precio")">
+                                                    Precios
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </li>
+                        }
+                        @if (Html.MostrarOpcion("menu", "consulta"))
+                        {
+                            <li class="sidebar-dropdown">
+                                <a href="#">
+                                    <i class="fa fa-search"></i>
+                                    <span>Consultas</span>
+                                </a>
+                                <div class="sidebar-submenu">
+                                    <ul>
+                                        @if (Html.MostrarOpcion("submenu", "consulta", "error"))
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("Index", "Error")">
+                                                    Error
+                                                </a>
+                                            </li>
+                                        }
+                                        @if (Html.MostrarOpcion("submenu", "consulta", "habitacioneslistas"))
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("Index", "HabitacionesListas")">
+                                                    Habitaciones listas
+                                                </a>
+                                            </li>
+                                        }
+                                        @if (Html.MostrarOpcion("submenu", "consulta", "clientesactivos"))
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("Index", "ClientesActivos")">
+                                                    Clientes Activos
+                                                </a>
+                                            </li>
+                                        }
+                                        @if (Html.MostrarOpcion("submenu", "consulta", "estadoclientes"))
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("Index", "EstadoClientes")">
+                                                    Estado Clientes
+                                                </a>
+                                            </li>
+                                        }
+                                        @if (Html.MostrarOpcion("submenu", "consulta", "bitacora"))
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("Index", "Bitacora")">
+                                                    Bitácora
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </li>
+
+                        }
+                        <li class="header-menu">
+                            <span>Otros</span>
+                        </li>                       
+                        <li>
+                            <a href="@Url.Action("Logout", "Core")">
+                                <i class="fa fa-sign-out-alt"></i>
+                                <span>Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- sidebar-menu  -->
+            </div>
+        </nav>
+        <!-- sidebar-wrapper  -->
+        <main class="page-content">
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+        </main>
+        <!-- page-content" -->
+    </div>
+    <!-- page-wrapper -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script src="~/Assets/js/menulateral.js"></script>
+    <script src="~/Assets/js/jquery.validate.js"></script>
+
+
+    <script>
+        function guardarError(error) {
+            $.ajax({
+                type: "GET",
+                url: "/Error/guardarErrorAjax?error=" + error,
+                processData: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) { },
+                error: function (xhr, textStatus, errorThrown) {
+                    alert(textStatus);
+                }
+            });
+        }
+
+        function validar(campo) {
+            var longitud = campo.val().trim();
+            var valor = campo.val();
+
+            if (longitud.length == 0 || valor == null || valor == "") {
+                return false;
+            } else {
+                return true;
+            }
+        }                  
+
+    </script>
+</body>
+</html>

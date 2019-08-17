@@ -1,0 +1,151 @@
+﻿@{
+    ViewBag.Title = "ArticuloPage";
+
+    List<HMandiola2.Data.sproc_hoteles_GetArticulo_Result> listaArticulos;
+    HMandiola2.Data.sproc_hoteles_GetArticulo_Result articulo = null;
+
+    if (ViewData["listaArticulos"] != null)
+    {
+        listaArticulos = ViewData["listaArticulos"] as List<HMandiola2.Data.sproc_hoteles_GetArticulo_Result>;
+
+        for (int x = 0; x < listaArticulos.Count(); x++)
+        {
+            articulo = listaArticulos[x];
+            break;
+        }
+    }
+}
+<body background="http://paperlief.com/images/turquoise-color-wallpaper-2.jpg">
+    <div align="center">
+        <div class="container divForm col-md-offset-4 col-md-5 text-center mediumContainer">
+            <div class="row ">
+                <div class="col-lg-8 col-lg-offset-2 text-center">
+                    <h1>
+                        <bold>
+                            Articulo
+                        </bold>
+                    </h1>
+                </div>
+                <div class="col-md-10 col-md-offset-1 text-left ">
+                    @{
+                        if (articulo != null)
+                        {
+                            <h6>
+                                Nombre (*)
+                            </h6>
+                            <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12" id="nombre" value="@articulo.Nombre" maxlength="50">
+                            <br>
+
+                            <h6>
+                                Descripcion
+                            </h6>
+                            <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12" id="descripcion" value="@articulo.Descripcion" maxlength="250">
+                            <br>
+
+                            <h6>
+                                Cantidad (*)
+                            </h6>
+                            <input type="number" class="form-control col-lg-12 col-md-12 col-xs-12" id="cantidad" value="@articulo.Cantidad" maxlength="5">
+                            <br>
+
+
+                            <input type="file" name="file" id="profile-img" onchange="encode();">
+                            <img src="@articulo.Imagen" id="loadImage" style="height:200px; width:200px;">
+                            <input type="hidden" id="image64" name="image64" value="@articulo.Imagen">
+                            <input type="hidden" id="idarticulo" name="idarticulo" value="@articulo.ID_Articulo">
+
+                        }
+                        else
+                        {
+                            <h6>
+                                Nombre (*)
+                            </h6>
+                            <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12" id="nombre" maxlength="50">
+                            <br>
+
+                            <h6>
+                                Descripcion
+                            </h6>
+                            <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12" id="descripcion" maxlength="250">
+                            <br>
+
+                            <h6>
+                                Cantidad (*)
+                            </h6>
+                            <input type="number" class="form-control col-lg-12 col-md-12 col-xs-12" id="cantidad" maxlength="5">
+                            <br>
+
+
+                            <input type="file" name="file" id="profile-img" onchange="encode();">
+                            <img src="" id="loadImage" style="height:200px; width:200px;">
+                            <input type="hidden" id="image64" name="image64">
+                            <input type="hidden" id="idarticulo" name="idarticulo">
+                        }
+                    }
+                    <button type="submit" id="saveButton" name="saveButton" value="saveButton"
+                            class="btn btn-info btn-xl col-lg-12 col-md-12 col-xs-12" style="margin-bottom:100px;">
+                        Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+    <script>
+    // Evento que envía una petición Ajax al servidor
+    $('#saveButton').click(function (e) {
+
+        if (validar($('#nombre')) &&
+            validar($('#cantidad'))) {
+            var actividad = {
+                ID_Articulo: $('#idarticulo').val(),
+                Nombre: $('#nombre').val(),
+                Descripcion: $('#descripcion').val(),
+                Cantidad: $('#cantidad').val(),
+                Imagen: $('#image64').val()
+            };
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("insertarArticulo", "Articulo")',
+                processData: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify(actividad),
+                success: function (response) {
+                    if (response.Success == true) {
+                        alert('Articulo creado correctamente!!');
+                        location.href = "@Url.Action("Index", "Articulo")";
+                    } else {
+                        alert('Ha ocurrido un problema, intentalo mas tarde!!');
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    guardarError(xhr.responseText);
+                }
+            });
+        } else {
+            alert("Favor llenar los campos requeridos");
+        }
+    });
+
+
+
+    function encode() {
+        var selectedfile = document.getElementById("profile-img").files;
+
+        var imageFile = selectedfile[0];
+        var fileReader = new FileReader();
+        fileReader.onload = function (fileLoadedEvent) {
+            var srcData = fileLoadedEvent.target.result;
+            var newImage = document.createElement('img');
+            newImage.src = srcData;
+            document.getElementById("image64").value = newImage.outerHTML;
+
+            $('#loadImage').attr('src', fileLoadedEvent.target.result);
+        }
+
+        fileReader.readAsDataURL(imageFile);
+    }
+
+    </script>

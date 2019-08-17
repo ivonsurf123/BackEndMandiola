@@ -1,0 +1,54 @@
+﻿
+<body background="http://paperlief.com/images/turquoise-color-wallpaper-2.jpg">
+    <div id="here_table"></div>
+</body>
+    <script>
+
+         $.ajax({
+            type: "GET",
+            url: '@Url.Action("devuelveHabitaciones", "Habitaciones")',
+            processData: false,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                if (response.Success == true) {
+
+                    var content = "<table class='table'>";
+                    content += "<thead class='thead-dark'>";
+                    content += "<tr>";
+                    content += "<th>Número habitación</th>";
+                    content += "<th>Estado</th>";
+                    content += "<th>Tipo</th>";
+                    content += "<th>Cantidad Personas</th>";
+                    content += "<th>Observaciones</th>";
+                    content += "</tr>";
+                    content += "</thead>";
+                    content += "<tbody>";
+
+                    for (var x = 0; x < response.Data.length; x++) {
+
+                        content += '<tr>';
+                        content += '<td>' + response.Data[x].NumeroHabitacion + '</td>';
+                        content += '<td>' + response.Data[x].Estado + '</td>';
+                        content += '<td>' + response.Data[x].Tipo_Habitacion + '</td>';
+                        content += '<td>' + response.Data[x].CantidadPersonas + '</td>';
+                        content += '<td>' + response.Data[x].Observaciones + '</td>';
+                        content += '</tr>';
+                    }
+                    content += "</tbody>";
+                    content += "</table>"
+
+                    $('#here_table').append(content);
+
+                } else {
+                    alert('Ha ocurrido un problema, intentalo mas tarde!!');
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+
+                guardarError(xhr.responseText);
+            }
+    });
+
+    </script>

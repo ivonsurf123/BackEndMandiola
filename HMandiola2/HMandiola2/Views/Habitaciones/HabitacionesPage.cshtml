@@ -1,0 +1,282 @@
+﻿
+@{
+    List<HMandiola2.Data.sproc_hoteles_GetHabitacion_Result> listaHabitaciones;
+    HMandiola2.Data.sproc_hoteles_GetHabitacion_Result habitacion = null;
+
+    if (ViewData["listaHabitaciones"] != null)
+    {
+        listaHabitaciones = ViewData["listaHabitaciones"] as List<HMandiola2.Data.sproc_hoteles_GetHabitacion_Result>;
+
+        for (int x = 0; x < listaHabitaciones.Count(); x++)
+        {
+            habitacion = listaHabitaciones[x];
+            break;
+        }
+    }
+}
+<body background="http://paperlief.com/images/turquoise-color-wallpaper-2.jpg">
+    <div align="center">
+        <div class="container divForm col-md-offset-4 col-md-5 text-center mediumContainer">
+            <div class="row ">
+                <div class="col-lg-8 col-lg-offset-2 text-center">
+                    <h1>
+                        <bold>
+                            Habitacion
+                        </bold>
+                    </h1>
+                </div>
+                <div class="col-md-10 col-md-offset-1 text-left ">
+                    @{
+                        if (habitacion != null)
+                        {
+                            <h6>
+                                Numero Habitacion (*)
+                            </h6>
+                            <input type="number" class="form-control col-lg-12 col-md-12 col-xs-12" id="numerohabitacion" value="@habitacion.NumeroHabitacion" maxlength="5">
+                            <br>
+
+                            <h6>
+                                Estado (*)
+                            </h6>
+                            <select id="estado" name="estado" class="btn pull-left btn-light" style="width: auto;">
+                                <option value="">Seleccione Estado</option>
+                                @{
+                                    if (habitacion.Estado == "Disponible")
+                                    {
+                                        <option value="Disponible" selected="selected">Disponible</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="Disponible">Disponible</option>
+                                    }
+
+                                    if (habitacion.Estado == "Reservado")
+                                    {
+                                        <option value="Reservado" selected="selected">Reservado</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="Reservado">Reservado</option>
+                                    }
+
+                                    if (habitacion.Estado == "En Uso")
+                                    {
+                                        <option value="En Uso" selected="selected">En Uso</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="En Uso">En Uso</option>
+                                    }
+                                }
+                            </select>
+                            <br>
+                            <br>
+
+
+                            <h6>
+                                Tipo Habitacion (*)
+                            </h6>
+                            <select id="tipohabitacion" name="tipohabitacion" class="btn pull-left btn-light" style="width: auto;">
+                                <option value="">Seleccione Tipo</option>
+                                @{
+                                    if (habitacion.Tipo_Habitacion == "Normal")
+                                    {
+                                        <option value="Normal" selected="selected">Normal</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="Normal">Normal</option>
+                                    }
+
+                                    if (habitacion.Tipo_Habitacion == "Deluxe")
+                                    {
+                                        <option value="Deluxe" selected="selected">Deluxe</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="Deluxe">Deluxe</option>
+                                    }
+
+                                    if (habitacion.Tipo_Habitacion == "Condominio")
+                                    {
+                                        <option value="Condominio" selected="selected">Condominio</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="Condominio">Condominio</option>
+                                    }
+                                }
+                            </select>
+                            <br>
+                            <br>
+
+
+
+                            <h6>
+                                Cantidad personas (*)
+                            </h6>
+                            <input type="number" class="form-control col-lg-12 col-md-12 col-xs-12" id="cantidadpersonas" value="@habitacion.CantidadPersonas" maxlength="2">
+                            <br>
+
+
+                            <h6>
+                                Camas individuales
+                            </h6>
+                            <input type="number" class="form-control col-lg-12 col-md-12 col-xs-12" id="camasindividuales" value="@habitacion.CamasIndividuales" maxlength="2">
+                            <br>
+
+                            <h6>
+                                Camas Matrimoniales
+                            </h6>
+                            <input type="number" class="form-control col-lg-12 col-md-12 col-xs-12" id="camasmatrimoniales" value="@habitacion.CamasMatrimoniales" maxlength="2">
+                            <br>
+
+                            <h6>
+                                Observaciones
+                            </h6>
+                            <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12" id="observaciones" value="@habitacion.Observaciones" maxlength="256">
+                            <br>
+
+
+                            <input type="file" name="file" id="profile-img" onchange="encode();">
+                            <img src="@habitacion.Imagen" id="loadImage" style="height:200px; width:200px;">
+                            <input type="hidden" id="image64" name="image64" value="@habitacion.Imagen">
+                            <input type="hidden" id="idhabitacion" name="idhabitacion" value="@habitacion.ID_Habitacion">
+                        }
+                        else
+                        {
+
+                            <h6>
+                                Numero Habitacion (*)
+                            </h6>
+                            <input type="number" class="form-control col-lg-12 col-md-12 col-xs-12" id="numerohabitacion" maxlength="10">
+                            <br>
+                            <br>
+
+                            <h6>
+                                Estado (*)
+                            </h6>
+                            <select id="estado" name="estado" class="btn pull-left btn-light" style="width: auto;">
+                                <option value="">Seleccione Tipo</option>
+                                <option value="Disponible">Disponible</option>
+                                <option value="Reservado">Reservado</option>
+                                <option value="En Uso">En Uso</option>
+                            </select>
+                            <br><br>
+
+                            <h6>
+                                Tipo habitacion (*)
+                            </h6>
+                            <select id="tipohabitacion" name="tipohabitacion" class="btn pull-left btn-light" style="width: auto;">
+                                <option value="">Seleccione Tipo</option>
+                                <option value="Normal">Normal</option>
+                                <option value="Deluxe">Deluxe</option>
+                                <option value="Condominio">Condominio</option>
+                            </select>
+                            <br>
+
+                            <h6>
+                                Cantidad personas (*)
+                            </h6>
+                            <input type="number" class="form-control col-lg-12 col-md-12 col-xs-12" id="cantidadpersonas" maxlength="2">
+                            <br>
+
+
+                            <h6>
+                                Camas individuales
+                            </h6>
+                            <input type="number" class="form-control col-lg-12 col-md-12 col-xs-12" id="camasindividuales" maxlength="2">
+                            <br>
+
+                            <h6>
+                                Camas Matrimoniales
+                            </h6>
+                            <input type="number" class="form-control col-lg-12 col-md-12 col-xs-12" id="camasmatrimoniales" maxlength="2">
+                            <br>
+
+                            <h6>
+                                Observaciones
+                            </h6>
+                            <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12" id="observaciones" maxlength="256">
+                            <br>
+
+                            <input type="file" name="file" id="profile-img" onchange="encode();">
+                            <img src="" id="loadImage" style="height:200px; width:200px;">
+                            <input type="hidden" id="image64" name="image64">
+                            <input type="hidden" id="idhabitacion" name="idhabitacion">
+                        }
+                    }
+
+
+                    <button type="submit" id="saveButton" name="saveButton" value="saveButton"
+                            class="btn btn-info btn-xl col-lg-12 col-md-12 col-xs-12" style="margin-bottom:100px;">
+                        Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    // Evento que envía una petición Ajax al servidor
+    $('#saveButton').click(function (e) {
+
+        if (validar($('#numerohabitacion')) &&
+            validar($('#estado')) &&
+            validar($('#tipohabitacion')) &&
+            validar($('#cantidadpersonas')) ) {
+             var habitacion = {
+            ID_Habitacion: $('#idhabitacion').val(),
+            NumeroHabitacion: $('#numerohabitacion').val(),
+                Estado: $('#estado').val(),
+                Tipo_Habitacion: $('#tipohabitacion').val(),
+                CantidadPersonas: $('#cantidadpersonas').val(),
+                CamasIndividuales: $('#camasindividuales').val(),
+                CamasMatrimoniales: $('#camasmatrimoniales').val(),
+                Observaciones: $('#observaciones').val(),
+                Imagen: $('#image64').val()
+            };
+
+                 $.ajax({
+                type: "POST",
+                url: '@Url.Action("insertarHabitacion", "Habitaciones")',
+                processData: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify(habitacion),
+                success: function (response) {
+                    if (response.Success == true) {
+                        alert('habitacion creado correctamente!!');
+                        location.href = "@Url.Action("Index", "Habitaciones")";
+                    }else {
+                        alert('Ha ocurrido un problema, intentalo mas tarde!!');
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    guardarError(xhr.responseText);
+                }
+            });
+        } else {
+            alert("Favor llenar los campos requeridos");
+        }
+
+    });
+
+    function encode() {
+        var selectedfile = document.getElementById("profile-img").files;
+
+            var imageFile = selectedfile[0];
+            var fileReader = new FileReader();
+            fileReader.onload = function (fileLoadedEvent) {
+                var srcData = fileLoadedEvent.target.result;
+                var newImage = document.createElement('img');
+                newImage.src = srcData;
+                document.getElementById("image64").value = newImage.outerHTML;
+
+                $('#loadImage').attr('src', fileLoadedEvent.target.result);
+            }
+
+            fileReader.readAsDataURL(imageFile);
+    }
+
+</script>

@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "View";
+}
+<body background="http://paperlief.com/images/turquoise-color-wallpaper-2.jpg">
+    <div id="here_table"></div>
+    <div>
+        <button id="buttonNuevoPrecio" name="buttonNuevoPrecio" type="button" class="btn btn-info">Nuevo Precio</button>
+    </div>
+</body>
+    <script>
+
+    $('#buttonNuevoPrecio').click(function (e) {
+           location.href = "@Url.Action("PrecioPage", "Precio")";
+    });
+
+         $.ajax({
+            type: "GET",
+            url: '@Url.Action("devuelvePrecios", "Precio")',
+            processData: false,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                if (response.Success == true) {
+
+                    var content = "<table class='table'>";
+                    content += "<thead class='thead-dark'>";
+                    content += "<tr>";
+                    content += "<th>Codigo</th>";
+                    content += "<th>Tipo</th>";
+                    content += "<th>Monto</th>";
+                    content += "<th></th>";
+                    content += "<th></th>";
+                    content += "<th></th>";
+                    content += "</tr>";
+                    content += "</thead>";
+                    content += "<tbody>";
+
+                    for (var x = 0; x < response.Data.length; x++) {
+                        content += '<tr">';
+                        content += '<td>' + response.Data[x].ID_Precio + '</td>';
+                        content += '<td>' + response.Data[x].Tipo + '</td>';
+                        content += '<td>' + response.Data[x].Monto + '</td>';
+
+                        if (response.Data[x].Es_Habitacion == true) {
+                            content += '<td>Habitación</td>';
+                        } else {
+                            content += '<td>Artículo</td>';
+                        }
+
+
+                        content += '<td><a href="/Precio/PrecioPage?precio_id=' + response.Data[x].ID_Precio + '">Editar</a></td>';
+                        content += '<td><a href="/Precio/Borrar?precio_id=' + response.Data[x].ID_Precio + '">Eliminar</a></td>';
+                        content += '</tr>';
+                    }
+                    content += "</tbody>";
+                    content += "</table>"
+
+                    $('#here_table').append(content);
+
+                } else {
+                    alert('Ha ocurrido un problema, intentalo mas tarde!!');
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                guardarError(xhr.responseText);
+            }
+    });
+
+
+
+    </script>

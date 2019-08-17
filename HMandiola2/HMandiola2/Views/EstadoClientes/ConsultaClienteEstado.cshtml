@@ -1,0 +1,117 @@
+﻿
+@{
+    List<HMandiola2.Data.sproc_hoteles_GetClienteEstado_Result> listaClienteEstado;
+    HMandiola2.Data.sproc_hoteles_GetClienteEstado_Result cliente = null;
+    string nombreCompleto = "";
+
+    if (ViewData["listaClienteEstado"] != null)
+    {
+        listaClienteEstado = ViewData["listaClienteEstado"] as List<HMandiola2.Data.sproc_hoteles_GetClienteEstado_Result>;
+
+        for (int x = 0; x < listaClienteEstado.Count(); x++)
+        {
+            cliente = listaClienteEstado[x];
+            nombreCompleto = cliente.Nombre + " " + cliente.PrimerApellido + " " + cliente.SegundoApellido;
+            break;
+        }
+
+
+    }
+}
+<body background="http://paperlief.com/images/turquoise-color-wallpaper-2.jpg">
+    <div align="center">
+        <div class="container divForm col-md-offset-4 col-md-5 text-center mediumContainer">
+            <div class="row ">
+                <div class="col-lg-8 col-lg-offset-2 text-center">
+                    <h1>
+                        <bold>
+                            Cliente
+                        </bold>
+                    </h1>
+                </div>
+                <div class="col-md-10 col-md-offset-1 text-left ">
+                    @{
+                        if (cliente != null)
+                        {
+                            <h6>
+                                Cédula
+                            </h6>
+                            <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12" id="cedula" value="@cliente.Cedula" readonly>
+                            <br>
+
+                            <h6>
+                                Nombre
+                            </h6>
+                            <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12" id="nombre" value="@nombreCompleto" readonly>
+                            <br>
+
+                            <h6>
+                                Estado
+                            </h6>
+                            <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12" id="tipocliente" value="@cliente.EstadoCliente">
+                            <br>
+
+                            <h6>
+                                Email
+                            </h6>
+                            <input type="number" class="form-control col-lg-12 col-md-12 col-xs-12" id="email" value="@cliente.Email" readonly>
+                            <br>
+
+
+                            <h6>
+                                Tipo Habitación Saleccionada
+                            </h6>
+                            <input type="number" class="form-control col-lg-12 col-md-12 col-xs-12" id="tipohabitacion" value="@cliente.TipoHabitacion" readonly>
+                            <br>
+
+                            <h6>
+                                Estado Reservación
+                            </h6>
+                            <input type="number" class="form-control col-lg-12 col-md-12 col-xs-12" id="estadoreserva" value="@cliente.EstadoReserva" readonly>
+                            <br>
+                        }
+                        else
+                        {
+                            <h6>
+                                Cédula
+                            </h6>
+                            <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12" id="cedula">
+                            <br>
+
+                            <h6>
+                                Nombre
+                            </h6>
+                            <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12" id="nombre">
+                            <br>
+
+                            <h6>
+                                Estado
+                            </h6>
+                            <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12" id="tipocliente">
+                            <br>
+
+                            <h6>
+                                Email
+                            </h6>
+                            <input type="number" class="form-control col-lg-12 col-md-12 col-xs-12" id="email">
+                            <br>
+
+
+                            <h6>
+                                Tipo Habitación Saleccionada
+                            </h6>
+                            <input type="number" class="form-control col-lg-12 col-md-12 col-xs-12" id="tipohabitacion">
+                            <br>
+
+                            <h6>
+                                Estado Reservación
+                            </h6>
+                            <input type="number" class="form-control col-lg-12 col-md-12 col-xs-12" id="estadoreserva">
+                            <br>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

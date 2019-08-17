@@ -1,0 +1,68 @@
+﻿@{
+    ViewBag.Title = "CambiarContrasena";
+}
+<body background="http://paperlief.com/images/turquoise-color-wallpaper-2.jpg">
+    <div id="here_table"></div>
+    <div>
+        <!-- Usuario -->
+        <div class="input-group input-group-sm mb-3 pt-4">
+            <input type="password" name="ContrasenaAnterior" id="ContrasenaAnterior" class="form-control">
+            <div class="input-group-append">
+                <span class="input-group-text text-info">Contraseña anterior</span>
+            </div>
+        </div>
+        <!-- Contraseña -->
+        <div class="input-group input-group-sm mb-3">
+            <input type="password" name="Contrasena" id="Contrasena" class="form-control">
+            <div class="input-group-append">
+                <span class="input-group-text text-info">Contraseña nueva</span>
+            </div>
+        </div>
+        <!-- Confirma -->
+        <div class="input-group input-group-sm mb-3">
+            <input type="password" name="ContrasenaConfirma" id="ContrasenaConfirma" class="form-control">
+            <div class="input-group-append">
+                <span class="input-group-text text-info">Confirma contraseña</span>
+            </div>
+        </div>
+    </div>
+    <!-- Guardar boton -->
+    <div class="input-group input-group-sm mb-3 justify-content-center pt-5">
+        <button type="submit" id="cambiarcontrasena" name="cambiarcontrasena" value="cambiarcontrasena" class="btn btn-outline-info rounded-bottom" style="border-radius: 12px">Cambiar Contraseña</button>
+    </div>
+    <!--====  End of inputs  ====-->
+</body>
+    <script>
+
+    // Evento que envía una petición Ajax al servidor
+    $('#cambiarcontrasena').click(function (e) {
+        e.preventDefault();
+        var cambiocontrasena = {
+            "ContrasenaAnterior": $("#ContrasenaAnterior").val(),
+            "Contrasena": $("#Contrasena").val(),
+            "ContrasenaConfirma": $("#ContrasenaConfirma").val()
+        };
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CambiarContrasena", "Contrasena")',
+        processData: false,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        data: JSON.stringify(cambiocontrasena),
+        success: function (response) {
+            if (response.Success == true) {
+                alert('Usuario registrado correctamente!!');
+                location.href = "@Url.Action("CambiarContrasena", "Contrasena")";
+            }else {
+                alert('Ha ocurrido un problema, intentalo mas tarde!!');
+            }
+        },
+        error: function (xhr, textStatus, errorThrown) {
+              alert('Error!!');
+        }
+        });
+    });
+
+    </script>
+

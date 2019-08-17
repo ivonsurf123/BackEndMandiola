@@ -1,0 +1,245 @@
+﻿
+@{
+    ViewBag.Title = "ConsecutivoPage";
+
+    List<HMandiola2.Data.sproc_hoteles_GetConsecutivo_Result> listaConsecutivos;
+    HMandiola2.Data.sproc_hoteles_GetConsecutivo_Result consecutivo = null;
+
+    if (ViewData["listaConsecutivos"] != null)
+    {
+        listaConsecutivos = ViewData["listaConsecutivos"] as List<HMandiola2.Data.sproc_hoteles_GetConsecutivo_Result>;
+
+        for (int x = 0; x < listaConsecutivos.Count(); x++)
+        {
+            consecutivo = listaConsecutivos[x];
+            break;
+        }
+    }
+}
+<body background="http://paperlief.com/images/turquoise-color-wallpaper-2.jpg">
+    <div align="center">
+        <div class="container divForm col-md-offset-4 col-md-5 text-center mediumContainer">
+            <div class="row ">
+                <div class="col-lg-8 col-lg-offset-2 text-center">
+                    <h1>
+                        <bold>
+                            Consecutivo
+                        </bold>
+                    </h1>
+                </div>
+                <div class="col-md-10 col-md-offset-1 text-left ">
+                    @{
+                        if (consecutivo != null)
+                        {
+                            <h6>
+                                Descripcion
+                            </h6>
+                            <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12" id="descripcion" value="@consecutivo.Descripcion" maxlength="250">
+                            <br>
+
+                            <h6>
+                                Consecutivo (*)
+                            </h6>
+                            <input type="number" class="form-control col-lg-12 col-md-12 col-xs-12" id="consecutivo" value="@consecutivo.Num_Consecutivo" disabled maxlength="5">
+                            <br>
+
+                            <!-- Consulta -->
+                            if (@consecutivo.Posee_Prefijo)
+                            {
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="poseeprefijo" checked>
+                                    <label class="custom-control-label" for="poseeprefijo">Posee prefijo</label>
+                                </div>
+                                <br>
+                            }
+                            else
+                            {
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="poseeprefijo">
+                                    <label class="custom-control-label" for="poseeprefijo">Posee prefijo</label>
+                                </div>
+                                <br>
+                            }
+
+
+                            <h6>
+                                Prefijo
+                            </h6>
+                            <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12" id="prefijo" value="@consecutivo.Prefijo">
+                            <br>
+
+                            if (@consecutivo.Posee_Rango)
+                            {
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="poseerango" checked>
+                                    <label class="custom-control-label" for="poseerango">Posee rango</label>
+                                </div>
+                                <br>
+                            }
+                            else
+                            {
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="poseerango">
+                                    <label class="custom-control-label" for="poseerango">Posee rango</label>
+                                </div>
+                                <br>
+                            }
+
+                            <h6>
+                                Rango inicial
+                            </h6>
+                            <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12" id="rangoinicial" value="@consecutivo.Rango_Inicial">
+                            <br>
+
+                            <h6>
+                                Rango final
+                            </h6>
+                            <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12" id="rangofinal" value="@consecutivo.Rango_Final">
+                            <br>
+                            <input type="hidden" id="idconsecutivo" name="idconsecutivo" value="@consecutivo.ID_Consecutivo">
+
+                        }
+                        else
+                        {
+                            <h6>
+                                Descripcion
+                            </h6>
+                            <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12" id="descripcion" maxlength="250">
+                            <br>
+
+                            <h6>
+                                Consecutivo (*)
+                            </h6>
+                            <input type="number" class="form-control col-lg-12 col-md-12 col-xs-12" id="consecutivo" maxlength="5">
+                            <br>
+
+                            <!-- Consulta -->
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="poseeprefijo">
+                                <label class="custom-control-label" for="poseeprefijo">Posee prefijo</label>
+                            </div>
+                            <br>
+
+                            <h6>
+                                Prefijo
+                            </h6>
+                            <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12" id="prefijo">
+                            <br>
+
+
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="poseerango">
+                                <label class="custom-control-label" for="poseerango">Posee rango</label>
+                            </div>
+                            <br>
+
+                            <h6>
+                                Rango inicial
+                            </h6>
+                            <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12" id="rangoinicial">
+                            <br>
+
+                            <h6>
+                                Rango final
+                            </h6>
+                            <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12" id="rangofinal">
+                            <br>
+                            <input type="hidden" id="idconsecutivo" name="idconsecutivo" value="0">
+                        }
+                    }
+
+                    <button type="submit" id="saveButton" name="saveButton" value="saveButton"
+                            class="btn btn-primary btn-xl col-lg-12 col-md-12 col-xs-12" style="margin-bottom:100px;">
+                        Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+    <script>
+
+
+    if (document.getElementById("poseeprefijo").checked) {
+        $('#prefijo').prop("disabled", false);
+    } else {
+        $('#prefijo').prop("disabled", true);
+    }
+
+    if (document.getElementById("poseerango").checked) {
+        $('#rangoinicial').prop("disabled", false);
+        $('#rangofinal').prop("disabled", false);
+    } else {
+        $('#rangoinicial').prop("disabled", true);
+        $('#rangofinal').prop("disabled", true);
+    }
+
+
+    $('#poseeprefijo').click(function (e) {
+        if (document.getElementById("poseeprefijo").checked) {
+            $('#prefijo').prop("disabled", false);
+        } else {
+            $('#prefijo').prop("disabled", true);
+        }
+    });
+
+    $('#poseerango').click(function (e) {
+        if (document.getElementById("poseerango").checked) {
+            $('#rangoinicial').prop("disabled", false);
+            $('#rangofinal').prop("disabled", false);
+        } else {
+            $('#rangoinicial').prop("disabled", true);
+            $('#rangofinal').prop("disabled", true);
+        }
+    });
+
+    // Evento que envía una petición Ajax al servidor
+    $('#saveButton').click(function (e) {
+
+
+        if (validar($('#cedula'))) {
+
+            if ($('#rangoinicial').val() > $('#rangofinal').val()) {
+            alert("El rango inicial no debe ser mayor al rango final");
+        } else {
+
+            var consecutivo = {
+                ID_Consecutivo: $('#idconsecutivo').val(),
+                Descripcion: $('#descripcion').val(),
+                Num_Consecutivo: $('#consecutivo').val(),
+                Posee_Prefijo: document.getElementById("poseeprefijo").checked,
+                Prefijo: $('#prefijo').val(),
+                Posee_Rango: document.getElementById("poseerango").checked,
+                Rango_Inicial: $('#rangoinicial').val(),
+                Rango_Final: $('#rangofinal').val()
+            };
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("insertarConsecutivo", "Consecutivos")',
+                processData: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify(consecutivo),
+                success: function (response) {
+                    if (response.Success == true) {
+                        alert('Consecutivo creado correctamente!!');
+                        location.href = "@Url.Action("Index", "Consecutivos")";
+                    } else {
+                        alert('Ha ocurrido un problema, intentalo mas tarde!!');
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    guardarError(xhr.responseText);
+                }
+            });
+        }
+
+
+        } else {
+            alert("Favor llenar los campos requeridos");
+        }
+
+});
+
+    </script>

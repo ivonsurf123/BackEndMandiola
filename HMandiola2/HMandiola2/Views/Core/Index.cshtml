@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    HMandiola2.Data.sproc_hoteles_LoginUsuario_Result usuario =
+        (HMandiola2.Data.sproc_hoteles_LoginUsuario_Result)System.Web.HttpContext.Current.Session["usuarioLogueado"];
+}
+<body background="http://paperlief.com/images/turquoise-color-wallpaper-2.jpg">
+    <h2>Bienvenido - @usuario.nombre @usuario.primerApellido @usuario.segundoApellido</h2>
+    <video autoplay muted loop id="myVideo">
+        <source src="~/Assets/Video/Es_por_ti.mp4" type="video/mp4">
+
+    </video>
+</body>

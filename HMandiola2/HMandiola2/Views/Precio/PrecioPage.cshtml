@@ -1,0 +1,302 @@
+﻿
+@{
+    ViewBag.Title = "PrecioPage";
+
+    List<HMandiola2.Data.sproc_hoteles_GetPrecio_Result> listaPrecios;
+    List<HMandiola2.Data.sproc_hoteles_GetArticuloList_Result> listaArticulos = null;
+
+    HMandiola2.Data.sproc_hoteles_GetPrecio_Result precio = null;
+
+    if (ViewData["listaPrecios"] != null)
+    {
+        listaPrecios = ViewData["listaPrecios"] as List<HMandiola2.Data.sproc_hoteles_GetPrecio_Result>;
+
+        for (int x = 0; x < listaPrecios.Count(); x++)
+        {
+            precio = listaPrecios[x];
+            break;
+        }
+    }
+
+    if (ViewData["listaArticulos"] != null)
+    {
+        listaArticulos = ViewData["listaArticulos"] as List<HMandiola2.Data.sproc_hoteles_GetArticuloList_Result>;
+
+    }
+}
+<body background="http://paperlief.com/images/turquoise-color-wallpaper-2.jpg">
+    <div align="center">
+        <div class="container divForm col-md-offset-4 col-md-5 text-center mediumContainer">
+            <div class="row ">
+                <div class="col-lg-8 col-lg-offset-2 text-center">
+                    @{
+                        if (precio != null)
+                        {
+                            if ((bool)precio.Es_Habitacion)
+                            {
+                                <h1 id="preciotitulo">
+                                    <bold>
+                                        Precio Habitacion
+                                    </bold>
+                                </h1>
+                            }
+                            else
+                            {
+                                <h1 id="preciotitulo">
+                                    <bold>
+                                        Precio Articulo
+                                    </bold>
+                                </h1>
+                            }
+                        }
+                        else
+                        {
+                            <h1 id="preciotitulo">
+                                <bold>
+                                    Precio Habitacion
+                                </bold>
+                            </h1>
+                        }
+
+                    }
+                </div>
+                <div class="col-md-10 col-md-offset-1 text-left ">
+                    @{
+                        if (precio != null)
+                        {
+                            if ((bool)precio.Es_Habitacion)
+                            {
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="esHabitacion" checked>
+                                    <label class="custom-control-label" for="esHabitacion">Precio de Habitación</label>
+                                </div>
+                                <br>
+
+                                <h6 id="tipohabitaciontitulo">
+                                    Tipo Habitacion
+                                </h6>
+                                <select id="tipoPrecio" name="tipoPrecio" class="btn pull-right btn-light" style="width: auto;">
+                                    <option value="">Seleccione Tipo</option>
+                                    @{
+                                        if (precio.Tipo == "Normal")
+                                        {
+                                            <option value="Normal" selected="selected">Normal</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="Normal">Normal</option>
+                                        }
+
+                                        if (precio.Tipo == "Deluxe")
+                                        {
+                                            <option value="Deluxe" selected="selected">Deluxe</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="Deluxe">Deluxe</option>
+                                        }
+
+                                        if (precio.Tipo == "Condominio")
+                                        {
+                                            <option value="Condominio" selected="selected">Condominio</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="Condominio">Condominio</option>
+                                        }
+                                    }
+                                </select>
+                                <br>
+
+
+                                <h6 id="tipoarticulotitulo" style="display: none;">
+                                    Tipo Articulo
+                                </h6>
+                                <select id="tipoArticulo" name="tipoArticulo" class="btn pull-right btn-light" style="width: auto; display: none;">
+                                    <option value="">Seleccione Tipo</option>
+                                </select>
+                                <br>
+
+                            }
+                            else
+                            {
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="esHabitacion">
+                                    <label class="custom-control-label" for="esHabitacion">Precio de Habitación</label>
+                                </div>
+                                <br>
+
+
+
+                                <h6 id="tipohabitaciontitulo" style="width: auto; display: none;">
+                                    Tipo Habitacion
+                                </h6>
+                                <select id="tipoPrecio" name="tipoPrecio" class="btn pull-right btn-light" style="width: auto; display: none;">
+                                    <option value="">Seleccione Tipo</option>
+                                    <option value="Normal">Normal</option>
+                                    <option value="Deluxe">Deluxe</option>
+                                    <option value="Condominio">Condominio</option>
+                                </select>
+                                <br>
+
+
+
+                                <h6 id="tipoarticulotitulo">
+                                    Tipo Articulo
+                                </h6>
+                                <select id="tipoArticulo" name="tipoArticulo" class="btn pull-right btn-light" style="width: auto;">
+                                    <option value="">Seleccione Tipo</option>
+                                    @{
+                                        if (listaArticulos != null)
+                                        {
+                                            for (int x = 0; x < listaArticulos.Count; x++)
+                                            {
+                                                if (listaArticulos[x].Nombre.Equals(precio.Tipo))
+                                                {
+                                                    <option value="@listaArticulos[x].Nombre" selected="selected">@listaArticulos[x].Nombre</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@listaArticulos[x].Nombre">@listaArticulos[x].Nombre</option>
+                                                }
+                                            }
+                                        }
+                                    }
+                                </select>
+                                <br>
+                            }
+
+
+                            <h6>
+                                Monto
+                            </h6>
+
+                            <input type="number" class="form-control col-lg-12 col-md-12 col-xs-12" id="monto" value="@precio.Monto.ToString().Replace(",",".")" min="1"
+                                   step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                   title="Numbers only">
+                            <br>
+
+                            <input type="hidden" id="idprecio" name="idprecio" value="@precio.ID_Precio">
+                        }
+                        else
+                        {
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="esHabitacion" checked>
+                                <label class="custom-control-label" for="esHabitacion">Precio de Habitación</label>
+                            </div>
+                            <br>
+
+
+                            <h6 id="tipohabitaciontitulo">
+                                Tipo Habitacion
+                            </h6>
+                            <select id="tipoPrecio" name="tipoPrecio" class="btn pull-right btn-light" style="width: auto;">
+                                <option value="">Seleccione Tipo</option>
+                                <option value="Normal">Normal</option>
+                                <option value="Deluxe">Deluxe</option>
+                                <option value="Condominio">Condominio</option>
+                            </select>
+                            <br>
+
+                            <h6 id="tipoarticulotitulo" style="width: auto; display: none;">
+                                Tipo Articulo
+                            </h6>
+                            <select id="tipoArticulo" name="tipoArticulo" class="btn pull-right btn-light" style="width: auto; display: none;">
+                                <option value="">Seleccione Tipo</option>
+                                @{
+                                    if (listaArticulos != null)
+                                    {
+                                        for (int x = 0; x < listaArticulos.Count; x++)
+                                        {
+                                            <option value="@listaArticulos[x].Nombre">@listaArticulos[x].Nombre</option>
+                                        }
+                                    }
+
+                                }
+                            </select>
+                            <br>
+
+                            <h6>
+                                Monto
+                            </h6>
+                            <input type="number" class="form-control col-lg-12 col-md-12 col-xs-12" id="monto" pattern="[0-9]+([\.,][0-9]+)?" step="0.01">
+                            <br>
+
+                            <input type="hidden" id="idprecio" name="idprecio" value="0">
+                        }
+                    }
+
+                    <button type="submit" id="saveButton" name="saveButton" value="saveButton"
+                            class="btn btn-primary btn-xl col-lg-12 col-md-12 col-xs-12" style="margin-bottom:100px;">
+                        Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+    <script>
+
+    $('#esHabitacion').click(function (e) {
+
+        if (document.getElementById("esHabitacion").checked) {
+            $('#tipoArticulo').hide();
+            $('#tipoarticulotitulo').hide();
+            $('#tipoPrecio').show();
+            $('#tipohabitaciontitulo').show();
+
+            $('#preciotitulo').text("Precio Habitación");
+
+        } else {
+            $('#tipoPrecio').hide();
+            $('#tipohabitaciontitulo').hide();
+            $('#tipoArticulo').show();
+            $('#tipoarticulotitulo').show();
+
+            $('#preciotitulo').text("Precio Artículo");
+        }
+    });
+
+    // Evento que envía una petición Ajax al servidor
+    $('#saveButton').click(function (e) {
+        var precio = null;
+
+        if (document.getElementById("esHabitacion").checked) {
+             precio = {
+                ID_Precio: $('#idprecio').val(),
+                Tipo: $('#tipoPrecio').val(),
+                Monto: $('#monto').val().replace(".00", ""),
+                Es_Habitacion: document.getElementById("esHabitacion").checked
+            };
+        } else {
+            precio = {
+                ID_Precio: $('#idprecio').val(),
+                Tipo: $('#tipoArticulo').val(),
+                Monto: $('#monto').val().replace(".00", ""),
+                Es_Habitacion: document.getElementById("esHabitacion").checked
+            };
+        }
+
+                 $.ajax({
+                type: "POST",
+                url: '@Url.Action("insertarPrecio", "Precio")',
+            processData: false,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(precio),
+            success: function (response) {
+                    if (response.Success == true) {
+                        alert('Precio creado correctamente!!');
+                        location.href = "@Url.Action("Index", "Precio")";
+                    }else {
+                        alert('Ha ocurrido un problema, intentalo mas tarde!!');
+                    }
+                },
+            error: function (xhr, textStatus, errorThrown) {
+
+                guardarError(xhr.responseText);
+                }
+            });
+});
+
+    </script>

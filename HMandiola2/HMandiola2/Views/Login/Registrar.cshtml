@@ -1,0 +1,141 @@
+﻿<script type="text/javascript" src="https://raw.githubusercontent.com/jquery-validation/jquery-validation/master/lib/require.js"></script>
+<body background="http://paperlief.com/images/turquoise-color-wallpaper-2.jpg">
+    <div align="center">
+        <div id="formularioValidar" class="container divForm col-md-offset-4 col-md-5 text-center mediumContainer">
+            <div class="row ">
+                <div class="col-lg-8 col-lg-offset-2 text-center">
+                    <h1>
+                        <bold>
+                            Registrar
+                        </bold>
+                    </h1>
+                </div>
+                <div class="col-md-10 col-md-offset-1 text-left ">
+                    <h6>
+                        Cédula (*)
+                    </h6>
+                    <input type="number" class="form-control col-lg-12 col-md-12 col-xs-12" id="cedula" placeholder="Ingresar cedula" maxlength="10">
+                    <br />
+                    <h6>
+                        Nombre (*)
+                    </h6>
+                    <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12" id="nombre" placeholder="Ingresar nombre" maxlength="40">
+                    <br />
+                    <h6>
+                        Primer apellido (*)
+                    </h6>
+                    <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12" id="apellido1" placeholder="Ingresar apellido" maxlength="40">
+                    <br />
+                    <h6>
+                        Segundo apellido (*)
+                    </h6>
+                    <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12" id="apellido2" placeholder="Ingresar apellido" maxlength="40">
+                    <br />
+                    <h6>
+                        Correo (*)
+                    </h6>
+                    <input type="email" class="form-control col-lg-12 col-md-12 col-xs-12" id="correo" placeholder="Ingresar correo" maxlength="20">
+                    <br />
+
+                    <h6>
+                        Contraseña (*)
+                    </h6>
+                    <input type="password" class="form-control col-lg-12 col-md-12 col-xs-12" id="contrasena" placeholder="Contraseña" maxlength="15">
+                    <br>
+
+                    <h6>
+                        Repetir Contraseña (*)
+                    </h6>
+                    <input type="password" class="form-control col-lg-12 col-md-12 col-xs-12" id="repetir_contrasena" name="repetir_contrasena" placeholder="Repetir Contraseña" maxlength="15">
+                    <br>
+                    <h6>
+                        Pregunta seguridad (*)
+                    </h6>
+                    <select id="preguntaseguridad" name="preguntaseguridad" class="btn pull-left btn-light" style="width: auto;">
+                        <option value="Nombre de tu primer mascota?">Nombre de tu primer mascota?</option>
+                        <option value="Primer albúm que compraste?">Primer albúm que compraste?</option>
+                        <option value="Tu trabajo de ensueño?">Tu trabajo de ensueño?</option>
+                    </select>
+                    <br />
+                    <br />
+                    <h6>
+                        Respuesta seguridad (*)
+                    </h6>
+                    <input type="text" class="form-control col-lg-12 col-md-12 col-xs-12" id="respuestaseguridad" placeholder="Ingresar respuesta" maxlength="50">
+                    <br />
+                    <button type="submit" id="loginButton" name="loginButton" value="loginButton"
+                            class="btn btn-primary btn-xl col-lg-12 col-md-12 col-xs-12" style="margin-bottom:100px;">
+                        Ingresar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+    <script>
+
+    // Evento que envía una petición Ajax al servidor
+    $('#loginButton').click(function (e) {
+
+
+        if (validar($('#cedula')) &&
+            validar($('#nombre')) &&
+            validar($('#apellido1')) &&
+            validar($('#apellido2')) &&
+            validar($('#correo')) &&
+            validar($('#contrasena')) &&
+            validar($('#repetir_contrasena')) &&
+            validar($('#respuestaseguridad'))) {
+
+             var usuario = {
+                Cedula: $('#cedula').val().trim(),
+                Nombre: $('#nombre').val(),
+                PrimerApellido: $('#apellido1').val(),
+                SegundoApellido: $('#apellido2').val(),
+                Correo: $('#correo').val(),
+                Contrasena: $('#contrasena').val(),
+                RepetirContrasena: $('#repetir_contrasena').val(),
+                PreguntaSeguridad: $('#preguntaseguridad').val(),
+                RespuestaSeguridad: $('#respuestaseguridad').val()
+            };
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("RegistrarUsuario", "Login")',
+                processData: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify(usuario),
+                success: function (response) {
+                    if (response.Success == true) {
+                        alert('Usuario registrado correctamente!!');
+                        location.href = "@Url.Action("Index", "Login")";
+                    } else {
+                        alert(response);
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    alert('Error!!');
+                    guardarError(xhr.responseText);
+                }
+            });
+        } else {
+            alert("Favor llenar los campos requeridos");
+        }
+
+
+
+});
+
+    function validar(campo) {
+        var longitud = campo.val().trim();
+        var valor = campo.val();
+
+        if (longitud.length == 0 || valor == null || valor == "" ) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    </script>

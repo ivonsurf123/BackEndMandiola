@@ -1,0 +1,126 @@
+﻿<body background="http://paperlief.com/images/turquoise-color-wallpaper-2.jpg">
+    <div align="center">
+        <div class="container divForm col-md-offset-4 col-md-5 text-center mediumContainer">
+            <div class="row ">
+                <div class="col-lg-8 col-lg-offset-2 text-center">
+
+                    <h1>Cambiar Contraseña</h1>
+                    <br />
+                </div>
+                <div class="col-md-10 col-md-offset-1 text-left ">
+                    <h3>
+                        Contraseña
+                    </h3>
+                    <input type="password" class="form-control col-lg-12 col-md-12 col-xs-12" id="contrasenaActual" aria-describedby="email" placeholder="Contraseña Actual" required />
+                    <h3>
+                        Nueva Contraseña
+                    </h3>
+                    <input type="password" class="form-control col-lg-12 col-md-12 col-xs-12" id="contrasenaNueva" placeholder="Nueva Contraseña" required />
+                    <h3>
+                        Confirmar Contraseña
+                    </h3>
+                    <input type="password" class="form-control col-lg-12 col-md-12 col-xs-12" id="contrasenaConfirmar" placeholder="Confirmar Contraseña" required />
+                    <br>
+                    <button type="button" id="cambiarConstrasenaButton" name="loginButton" value="loginButton"
+                            class="btn btn-info btn-xl col-lg-12 col-md-12 col-xs-12">
+                        Cambiar Contraseña
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+    <script type="text/javascript">
+
+    var mensaje;
+    var contrasenaActual;
+    var contrasenaNueva;
+
+    mostrarMensaje = function (mensaje) {
+
+        alert(mensaje);
+        limpiarCampos();
+    }
+
+    limpiarCampos = function () {
+
+        $('#contrasenaActual').val("");
+        $('#contrasenaNueva').val("");
+        $('#contrasenaConfirmar').val("");
+    }
+
+    $('#cambiarConstrasenaButton').click(function () {
+
+        if (validarContrasenaNueva()) {
+
+             $.ajax({
+                type: "POST",
+                async: false,
+                url: '@Url.Action("cambiarContrasena", "Seguridad")',
+                data: { contrasenaActual: contrasenaActual, contrasenaNueva: contrasenaNueva},
+                dataType: "json",
+                success: function (data) {
+                    if (data.Result == "OK") {
+                        resultado = true;
+                        mostrarMensaje("Contraseña cambiada con éxito");
+                        window.location.href = '@Url.Action("Logout", "Core")';
+                    } else {
+                        resultado = false;
+                        mostrarMensaje(data.Message);
+                    }
+                },
+                error: function () {
+                    mostrarMensaje('Ha ocurrido un problema, intentalo más tarde!!');
+                    resultado = false;
+                }
+            });
+        } else {
+            mostrarMensaje(mensaje);
+        }
+    });
+
+    validarContrasenaNueva = function () {
+
+        resultado = false;
+        contrasenaActual = $('#contrasenaActual').val();
+        contrasenaNueva = $('#contrasenaNueva').val();
+        contrasenaConfirmar = $('#contrasenaConfirmar').val();
+
+
+        if (contrasenaActual == undefined || contrasenaActual == null || contrasenaActual == ''
+            || contrasenaNueva == undefined || contrasenaNueva == null || contrasenaNueva == ''
+            || contrasenaConfirmar == undefined || contrasenaConfirmar == null || contrasenaConfirmar == '') {
+
+            mensaje = "Hacen falta campos requeridos";
+            return false;
+        }
+
+        if (contrasenaNueva == contrasenaConfirmar) {
+            resultado = true;
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: '@Url.Action("validarContrasena", "Seguridad")',
+                data: { contrasenaActual: contrasenaActual },
+                dataType: "json",
+                success: function (data) {
+                    if (data.Result == "OK") {
+                        resultado = true;
+                    } else {
+                        resultado = false;
+                        mensaje = data.Message;
+                    }
+                },
+                error: function () {
+                    mensaje = 'Ha ocurrido un problema, intentalo más tarde!!';
+                    resultado = false;
+                }
+            });
+        } else {
+            mensaje = "La contraseñas no coinciden";
+            resultado = false;
+        }
+
+        return resultado;
+    }
+    </script>
