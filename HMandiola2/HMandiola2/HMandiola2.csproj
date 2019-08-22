@@ -192,6 +192,9 @@
     <Compile Include="Data\Habitacion.cs">
       <DependentUpon>Hoteles.tt</DependentUpon>
     </Compile>
+    <Compile Include="Data\Historial_Transaccion.cs">
+      <DependentUpon>Hoteles.tt</DependentUpon>
+    </Compile>
     <Compile Include="Data\Hoteles.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -211,6 +214,9 @@
       <DependentUpon>Hoteles.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\Reserva.cs">
+      <DependentUpon>Hoteles.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Reserva_Habitacion.cs">
       <DependentUpon>Hoteles.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\Rol.cs">
@@ -349,6 +355,9 @@
       <DependentUpon>Hoteles.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\sproc_hoteles_GetUsuario_Result.cs">
+      <DependentUpon>Hoteles.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\sproc_hoteles_LoginCliente_Result.cs">
       <DependentUpon>Hoteles.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\sproc_hoteles_LoginUsuario_Result.cs">

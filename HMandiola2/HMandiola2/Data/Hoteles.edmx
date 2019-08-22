@@ -142,6 +142,18 @@
           <Property Name="Imagen" Type="nvarchar(max)" />
           <Property Name="Tipo_Habitacion" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="Historial_Transaccion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_Consecutivo" Type="int" Nullable="false" />
+          <Property Name="ID_Cliente" Type="int" Nullable="false" />
+          <Property Name="Metodo_pago" Type="int" Nullable="false" />
+          <Property Name="Monto" Type="int" Nullable="false" />
+          <Property Name="ID_Habitacion" Type="int" />
+          <Property Name="ID_Articulo" Type="int" />
+        </EntityType>
         <EntityType Name="Precio">
           <Key>
             <PropertyRef Name="ID_Precio" />
@@ -158,6 +170,11 @@
           <Property Name="ID_Reserva" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="EstadoReserva_ID_EstadoRes" Type="int" Nullable="false" />
           <Property Name="Cliente_Cedula" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Llegada" Type="date" />
+          <Property Name="Noches" Type="int" />
+          <Property Name="Adultos" Type="int" />
+          <Property Name="Ninos" Type="int" />
+          <Property Name="Promocional" Type="varchar" MaxLength="50" />
           <Property Name="Fecha" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="Reserva_Habitacion">
@@ -272,18 +289,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Compra_Reserva">
-          <End Role="Reserva" Type="Self.Reserva" Multiplicity="1" />
-          <End Role="Compra" Type="Self.Compra" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Reserva">
-              <PropertyRef Name="ID_Reserva" />
-            </Principal>
-            <Dependent Role="Compra">
-              <PropertyRef Name="Reserva_ID_Reserva" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="EasyPay_SB_Tarjeta">
           <End Role="SB_Tarjeta" Type="Self.SB_Tarjeta" Multiplicity="1" />
           <End Role="EasyPay" Type="Self.EasyPay" Multiplicity="*" />
@@ -332,18 +337,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Reserva_Habitacion_Reserva">
-          <End Role="Reserva" Type="Self.Reserva" Multiplicity="1" />
-          <End Role="Reserva_Habitacion" Type="Self.Reserva_Habitacion" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Reserva">
-              <PropertyRef Name="ID_Reserva" />
-            </Principal>
-            <Dependent Role="Reserva_Habitacion">
-              <PropertyRef Name="Reserva_ID_Reserva" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="Rol_Usuario_Rol">
           <End Role="Rol" Type="Self.Rol" Multiplicity="1" />
           <End Role="Rol_Usuario" Type="Self.Rol_Usuario" Multiplicity="*" />
@@ -381,6 +374,12 @@
           </ReferentialConstraint>
         </Association>
         <Function Name="sproc_hoteles_CambiarContrasena" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="correo" Type="nvarchar" Mode="In" />
+          <Parameter Name="contrasena" Type="nvarchar" Mode="In" />
+          <Parameter Name="NuevaContrasena" Type="nvarchar" Mode="In" />
+          <Parameter Name="IsPasswordChanged" Type="bit" Mode="InOut" />
+        </Function>
+        <Function Name="sproc_hoteles_CambiarContrasenaCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="correo" Type="nvarchar" Mode="In" />
           <Parameter Name="contrasena" Type="nvarchar" Mode="In" />
           <Parameter Name="NuevaContrasena" Type="nvarchar" Mode="In" />
@@ -454,9 +453,6 @@
         </Function>
         <Function Name="sproc_hoteles_DeleteTarjeta_Cliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Cliente_Cedula" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="sproc_hoteles_DeleteTipo_Habitacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ID_TipoHab" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="sproc_hoteles_DeleteUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Cedula" Type="nvarchar" Mode="In" />
@@ -575,12 +571,6 @@
         <Function Name="sproc_hoteles_GetTarjetaList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Num_Tarjeta" Type="nvarchar" Mode="In" />
         </Function>
-        <Function Name="sproc_hoteles_GetTipo_Habitacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ID_TipoHab" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="sproc_hoteles_GetTipo_HabitacionList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ID_TipoHab" Type="nvarchar" Mode="In" />
-        </Function>
         <Function Name="sproc_hoteles_GetUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Cedula" Type="nvarchar" Mode="In" />
         </Function>
@@ -673,6 +663,11 @@
         <Function Name="sproc_hoteles_InsertReserva" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EstadoReserva_ID_EstadoRes" Type="int" Mode="In" />
           <Parameter Name="Cliente_Cedula" Type="nvarchar" Mode="In" />
+          <Parameter Name="Llegada" Type="date" Mode="In" />
+          <Parameter Name="Noches" Type="int" Mode="In" />
+          <Parameter Name="Adultos" Type="int" Mode="In" />
+          <Parameter Name="Ninos" Type="int" Mode="In" />
+          <Parameter Name="Promocional" Type="varchar" Mode="In" />
           <Parameter Name="Fecha" Type="datetime" Mode="In" />
         </Function>
         <Function Name="sproc_hoteles_InsertRol" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -701,10 +696,6 @@
           <Parameter Name="Cliente_Cedula" Type="nvarchar" Mode="In" />
           <Parameter Name="Tarjeta_Num_Tarjeta" Type="nvarchar" Mode="In" />
         </Function>
-        <Function Name="sproc_hoteles_InsertTipo_Habitacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ID_TipoHab" Type="nvarchar" Mode="In" />
-          <Parameter Name="Descripcion" Type="nvarchar" Mode="In" />
-        </Function>
         <Function Name="sproc_hoteles_InsertUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Cedula" Type="nvarchar" Mode="In" />
           <Parameter Name="Nombre" Type="nvarchar" Mode="In" />
@@ -714,6 +705,10 @@
           <Parameter Name="Contrasena" Type="nvarchar" Mode="In" />
           <Parameter Name="PreguntaSeguridad" Type="nvarchar" Mode="In" />
           <Parameter Name="RespuestaSeguridad" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sproc_hoteles_LoginCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="correo" Type="nvarchar" Mode="In" />
+          <Parameter Name="contrasena" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="sproc_hoteles_LoginUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="correo" Type="nvarchar" Mode="In" />
@@ -842,10 +837,6 @@
           <Parameter Name="Cliente_Cedula" Type="nvarchar" Mode="In" />
           <Parameter Name="Tarjeta_Num_Tarjeta" Type="nvarchar" Mode="In" />
         </Function>
-        <Function Name="sproc_hoteles_UpdateTipo_Habitacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="ID_TipoHab" Type="nvarchar" Mode="In" />
-          <Parameter Name="Descripcion" Type="nvarchar" Mode="In" />
-        </Function>
         <Function Name="sproc_hoteles_UpdateUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Cedula" Type="nvarchar" Mode="In" />
           <Parameter Name="Nombre" Type="nvarchar" Mode="In" />
@@ -857,6 +848,11 @@
           <Parameter Name="RespuestaSeguridad" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="sproc_hoteles_ValidarContrasena" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="correo" Type="nvarchar" Mode="In" />
+          <Parameter Name="contrasena" Type="nvarchar" Mode="In" />
+          <Parameter Name="IsPasswordValid" Type="bit" Mode="InOut" />
+        </Function>
+        <Function Name="sproc_hoteles_ValidarContrasenaCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="correo" Type="nvarchar" Mode="In" />
           <Parameter Name="contrasena" Type="nvarchar" Mode="In" />
           <Parameter Name="IsPasswordValid" Type="bit" Mode="InOut" />
@@ -876,6 +872,7 @@
           <EntitySet Name="EstadoHabitacion" EntityType="Self.EstadoHabitacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EstadoReserva" EntityType="Self.EstadoReserva" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Habitacion" EntityType="Self.Habitacion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Historial_Transaccion" EntityType="Self.Historial_Transaccion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Precio" EntityType="Self.Precio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Reserva" EntityType="Self.Reserva" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Reserva_Habitacion" EntityType="Self.Reserva_Habitacion" Schema="dbo" store:Type="Tables" />
@@ -901,10 +898,6 @@
             <End Role="EstadoCliente" EntitySet="EstadoCliente" />
             <End Role="Cliente" EntitySet="Cliente" />
           </AssociationSet>
-          <AssociationSet Name="Compra_Reserva" Association="Self.Compra_Reserva">
-            <End Role="Reserva" EntitySet="Reserva" />
-            <End Role="Compra" EntitySet="Compra" />
-          </AssociationSet>
           <AssociationSet Name="EasyPay_SB_Tarjeta" Association="Self.EasyPay_SB_Tarjeta">
             <End Role="SB_Tarjeta" EntitySet="SB_Tarjeta" />
             <End Role="EasyPay" EntitySet="EasyPay" />
@@ -919,10 +912,6 @@
           </AssociationSet>
           <AssociationSet Name="Reserva_Habitacion_Habitacion" Association="Self.Reserva_Habitacion_Habitacion">
             <End Role="Habitacion" EntitySet="Habitacion" />
-            <End Role="Reserva_Habitacion" EntitySet="Reserva_Habitacion" />
-          </AssociationSet>
-          <AssociationSet Name="Reserva_Habitacion_Reserva" Association="Self.Reserva_Habitacion_Reserva">
-            <End Role="Reserva" EntitySet="Reserva" />
             <End Role="Reserva_Habitacion" EntitySet="Reserva_Habitacion" />
           </AssociationSet>
           <AssociationSet Name="Rol_Usuario_Rol" Association="Self.Rol_Usuario_Rol">
@@ -1023,7 +1012,6 @@
           <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Actividad_Compra" Relationship="Self.Actividad_Compra_Compra" FromRole="Compra" ToRole="Actividad_Compra" />
           <NavigationProperty Name="Articulo_Compra" Relationship="Self.Articulo_Compra_Compra" FromRole="Compra" ToRole="Articulo_Compra" />
-          <NavigationProperty Name="Reserva" Relationship="Self.Compra_Reserva" FromRole="Compra" ToRole="Reserva" />
         </EntityType>
         <EntityType Name="Consecutivo">
           <Key>
@@ -1092,7 +1080,19 @@
           <Property Name="Observaciones" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Imagen" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Tipo_Habitacion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Reservas" Relationship="Self.Reserva_Habitacion" FromRole="Habitacion" ToRole="Reserva" />
+          <NavigationProperty Name="Reserva_Habitacion" Relationship="Self.Reserva_Habitacion_Habitacion" FromRole="Habitacion" ToRole="Reserva_Habitacion" />
+        </EntityType>
+        <EntityType Name="Historial_Transaccion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_Consecutivo" Type="Int32" Nullable="false" />
+          <Property Name="ID_Cliente" Type="Int32" Nullable="false" />
+          <Property Name="Metodo_pago" Type="Int32" Nullable="false" />
+          <Property Name="Monto" Type="Int32" Nullable="false" />
+          <Property Name="ID_Habitacion" Type="Int32" />
+          <Property Name="ID_Articulo" Type="Int32" />
         </EntityType>
         <EntityType Name="Precio">
           <Key>
@@ -1110,11 +1110,23 @@
           <Property Name="ID_Reserva" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="EstadoReserva_ID_EstadoRes" Type="Int32" Nullable="false" />
           <Property Name="Cliente_Cedula" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Llegada" Type="DateTime" Precision="0" />
+          <Property Name="Noches" Type="Int32" />
+          <Property Name="Adultos" Type="Int32" />
+          <Property Name="Ninos" Type="Int32" />
+          <Property Name="Promocional" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
           <NavigationProperty Name="Cliente" Relationship="Self.Reserva_Cliente" FromRole="Reserva" ToRole="Cliente" />
-          <NavigationProperty Name="Compras" Relationship="Self.Compra_Reserva" FromRole="Reserva" ToRole="Compra" />
           <NavigationProperty Name="EstadoReserva" Relationship="Self.Reserva_EstadoReserva" FromRole="Reserva" ToRole="EstadoReserva" />
-          <NavigationProperty Name="Habitacions" Relationship="Self.Reserva_Habitacion" FromRole="Reserva" ToRole="Habitacion" />
+        </EntityType>
+        <EntityType Name="Reserva_Habitacion">
+          <Key>
+            <PropertyRef Name="Reserva_ID_Reserva" />
+            <PropertyRef Name="Habitacion_ID_Habitacion" />
+          </Key>
+          <Property Name="Reserva_ID_Reserva" Type="Int32" Nullable="false" />
+          <Property Name="Habitacion_ID_Habitacion" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Habitacion" Relationship="Self.Reserva_Habitacion_Habitacion" FromRole="Reserva_Habitacion" ToRole="Habitacion" />
         </EntityType>
         <EntityType Name="Rol">
           <Key>
@@ -1229,18 +1241,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Compra_Reserva">
-          <End Role="Reserva" Type="Self.Reserva" Multiplicity="1" />
-          <End Role="Compra" Type="Self.Compra" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Reserva">
-              <PropertyRef Name="ID_Reserva" />
-            </Principal>
-            <Dependent Role="Compra">
-              <PropertyRef Name="Reserva_ID_Reserva" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="EasyPay_SB_Tarjeta">
           <End Role="SB_Tarjeta" Type="Self.SB_Tarjeta" Multiplicity="1" />
           <End Role="EasyPay" Type="Self.EasyPay" Multiplicity="*" />
@@ -1265,6 +1265,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="Reserva_Habitacion_Habitacion">
+          <End Role="Habitacion" Type="Self.Habitacion" Multiplicity="1" />
+          <End Role="Reserva_Habitacion" Type="Self.Reserva_Habitacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Habitacion">
+              <PropertyRef Name="ID_Habitacion" />
+            </Principal>
+            <Dependent Role="Reserva_Habitacion">
+              <PropertyRef Name="Habitacion_ID_Habitacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="Rol_Usuario_Rol">
           <End Role="Rol" Type="Self.Rol" Multiplicity="1" />
           <End Role="Rol_Usuario" Type="Self.Rol_Usuario" Multiplicity="*" />
@@ -1276,10 +1288,6 @@
               <PropertyRef Name="Rol_ID_Rol" />
             </Dependent>
           </ReferentialConstraint>
-        </Association>
-        <Association Name="Reserva_Habitacion">
-          <End Role="Habitacion" Type="Self.Habitacion" Multiplicity="*" />
-          <End Role="Reserva" Type="Self.Reserva" Multiplicity="*" />
         </Association>
         <Association Name="Tarjeta_Cliente">
           <End Role="Cliente" Type="Self.Cliente" Multiplicity="*" />
@@ -1300,8 +1308,10 @@
           <EntitySet Name="EstadoHabitacions" EntityType="Self.EstadoHabitacion" />
           <EntitySet Name="EstadoReservas" EntityType="Self.EstadoReserva" />
           <EntitySet Name="Habitacions" EntityType="Self.Habitacion" />
+          <EntitySet Name="Historial_Transaccion" EntityType="Self.Historial_Transaccion" />
           <EntitySet Name="Precios" EntityType="Self.Precio" />
           <EntitySet Name="Reservas" EntityType="Self.Reserva" />
+          <EntitySet Name="Reserva_Habitacion" EntityType="Self.Reserva_Habitacion" />
           <EntitySet Name="Rols" EntityType="Self.Rol" />
           <EntitySet Name="Rol_Usuario" EntityType="Self.Rol_Usuario" />
           <EntitySet Name="SB_Tarjeta" EntityType="Self.SB_Tarjeta" />
@@ -1327,10 +1337,6 @@
             <End Role="Cliente" EntitySet="Clientes" />
             <End Role="Reserva" EntitySet="Reservas" />
           </AssociationSet>
-          <AssociationSet Name="Compra_Reserva" Association="Self.Compra_Reserva">
-            <End Role="Reserva" EntitySet="Reservas" />
-            <End Role="Compra" EntitySet="Compras" />
-          </AssociationSet>
           <AssociationSet Name="EasyPay_SB_Tarjeta" Association="Self.EasyPay_SB_Tarjeta">
             <End Role="SB_Tarjeta" EntitySet="SB_Tarjeta" />
             <End Role="EasyPay" EntitySet="EasyPays" />
@@ -1339,19 +1345,25 @@
             <End Role="EstadoReserva" EntitySet="EstadoReservas" />
             <End Role="Reserva" EntitySet="Reservas" />
           </AssociationSet>
+          <AssociationSet Name="Reserva_Habitacion_Habitacion" Association="Self.Reserva_Habitacion_Habitacion">
+            <End Role="Habitacion" EntitySet="Habitacions" />
+            <End Role="Reserva_Habitacion" EntitySet="Reserva_Habitacion" />
+          </AssociationSet>
           <AssociationSet Name="Rol_Usuario_Rol" Association="Self.Rol_Usuario_Rol">
             <End Role="Rol" EntitySet="Rols" />
             <End Role="Rol_Usuario" EntitySet="Rol_Usuario" />
-          </AssociationSet>
-          <AssociationSet Name="Reserva_Habitacion" Association="Self.Reserva_Habitacion">
-            <End Role="Habitacion" EntitySet="Habitacions" />
-            <End Role="Reserva" EntitySet="Reservas" />
           </AssociationSet>
           <AssociationSet Name="Tarjeta_Cliente" Association="Self.Tarjeta_Cliente">
             <End Role="Cliente" EntitySet="Clientes" />
             <End Role="Tarjeta" EntitySet="Tarjetas" />
           </AssociationSet>
           <FunctionImport Name="sproc_hoteles_CambiarContrasena">
+            <Parameter Name="correo" Mode="In" Type="String" />
+            <Parameter Name="contrasena" Mode="In" Type="String" />
+            <Parameter Name="NuevaContrasena" Mode="In" Type="String" />
+            <Parameter Name="IsPasswordChanged" Mode="InOut" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="sproc_hoteles_CambiarContrasenaCliente">
             <Parameter Name="correo" Mode="In" Type="String" />
             <Parameter Name="contrasena" Mode="In" Type="String" />
             <Parameter Name="NuevaContrasena" Mode="In" Type="String" />
@@ -1425,9 +1437,6 @@
           </FunctionImport>
           <FunctionImport Name="sproc_hoteles_DeleteTarjeta_Cliente">
             <Parameter Name="Cliente_Cedula" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="sproc_hoteles_DeleteTipo_Habitacion">
-            <Parameter Name="ID_TipoHab" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sproc_hoteles_DeleteUsuario">
             <Parameter Name="Cedula" Mode="In" Type="String" />
@@ -1546,12 +1555,6 @@
           <FunctionImport Name="sproc_hoteles_GetTarjetaList" ReturnType="Collection(HotelesModel.sproc_hoteles_GetTarjetaList_Result)">
             <Parameter Name="Num_Tarjeta" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="sproc_hoteles_GetTipo_Habitacion">
-            <Parameter Name="ID_TipoHab" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="sproc_hoteles_GetTipo_HabitacionList">
-            <Parameter Name="ID_TipoHab" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="sproc_hoteles_GetUsuario" ReturnType="Collection(HotelesModel.sproc_hoteles_GetUsuario_Result)">
             <Parameter Name="Cedula" Mode="In" Type="String" />
           </FunctionImport>
@@ -1644,6 +1647,11 @@
           <FunctionImport Name="sproc_hoteles_InsertReserva">
             <Parameter Name="EstadoReserva_ID_EstadoRes" Mode="In" Type="Int32" />
             <Parameter Name="Cliente_Cedula" Mode="In" Type="String" />
+            <Parameter Name="Llegada" Mode="In" Type="DateTime" />
+            <Parameter Name="Noches" Mode="In" Type="Int32" />
+            <Parameter Name="Adultos" Mode="In" Type="Int32" />
+            <Parameter Name="Ninos" Mode="In" Type="Int32" />
+            <Parameter Name="Promocional" Mode="In" Type="String" />
             <Parameter Name="Fecha" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="sproc_hoteles_InsertRol">
@@ -1672,10 +1680,6 @@
             <Parameter Name="Cliente_Cedula" Mode="In" Type="String" />
             <Parameter Name="Tarjeta_Num_Tarjeta" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="sproc_hoteles_InsertTipo_Habitacion">
-            <Parameter Name="ID_TipoHab" Mode="In" Type="String" />
-            <Parameter Name="Descripcion" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="sproc_hoteles_InsertUsuario">
             <Parameter Name="Cedula" Mode="In" Type="String" />
             <Parameter Name="Nombre" Mode="In" Type="String" />
@@ -1685,6 +1689,10 @@
             <Parameter Name="Contrasena" Mode="In" Type="String" />
             <Parameter Name="PreguntaSeguridad" Mode="In" Type="String" />
             <Parameter Name="RespuestaSeguridad" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sproc_hoteles_LoginCliente" ReturnType="Collection(HotelesModel.sproc_hoteles_LoginCliente_Result)">
+            <Parameter Name="correo" Mode="In" Type="String" />
+            <Parameter Name="contrasena" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sproc_hoteles_LoginUsuario" ReturnType="Collection(HotelesModel.sproc_hoteles_LoginUsuario_Result)">
             <Parameter Name="correo" Mode="In" Type="String" />
@@ -1813,10 +1821,6 @@
             <Parameter Name="Cliente_Cedula" Mode="In" Type="String" />
             <Parameter Name="Tarjeta_Num_Tarjeta" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="sproc_hoteles_UpdateTipo_Habitacion">
-            <Parameter Name="ID_TipoHab" Mode="In" Type="String" />
-            <Parameter Name="Descripcion" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="sproc_hoteles_UpdateUsuario">
             <Parameter Name="Cedula" Mode="In" Type="String" />
             <Parameter Name="Nombre" Mode="In" Type="String" />
@@ -1828,6 +1832,11 @@
             <Parameter Name="RespuestaSeguridad" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sproc_hoteles_ValidarContrasena">
+            <Parameter Name="correo" Mode="In" Type="String" />
+            <Parameter Name="contrasena" Mode="In" Type="String" />
+            <Parameter Name="IsPasswordValid" Mode="InOut" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="sproc_hoteles_ValidarContrasenaCliente">
             <Parameter Name="correo" Mode="In" Type="String" />
             <Parameter Name="contrasena" Mode="In" Type="String" />
             <Parameter Name="IsPasswordValid" Mode="InOut" Type="Boolean" />
@@ -2127,6 +2136,12 @@
           <Property Type="String" Name="PreguntaSeguridad" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="RespuestaSeguridad" Nullable="true" MaxLength="200" />
         </ComplexType>
+        <ComplexType Name="sproc_hoteles_LoginCliente_Result">
+          <Property Type="String" Name="cedula" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="nombre" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="primerApellido" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="segundoApellido" Nullable="true" MaxLength="200" />
+        </ComplexType>
         <ComplexType Name="sproc_hoteles_LoginUsuario_Result">
           <Property Type="String" Name="cedula" Nullable="true" MaxLength="200" />
           <Property Type="String" Name="nombre" Nullable="true" MaxLength="200" />
@@ -2288,6 +2303,19 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Historial_Transaccion">
+            <EntityTypeMapping TypeName="HotelesModel.Historial_Transaccion">
+              <MappingFragment StoreEntitySet="Historial_Transaccion">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ID_Consecutivo" ColumnName="ID_Consecutivo" />
+                <ScalarProperty Name="ID_Cliente" ColumnName="ID_Cliente" />
+                <ScalarProperty Name="Metodo_pago" ColumnName="Metodo_pago" />
+                <ScalarProperty Name="Monto" ColumnName="Monto" />
+                <ScalarProperty Name="ID_Habitacion" ColumnName="ID_Habitacion" />
+                <ScalarProperty Name="ID_Articulo" ColumnName="ID_Articulo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Precios">
             <EntityTypeMapping TypeName="HotelesModel.Precio">
               <MappingFragment StoreEntitySet="Precio">
@@ -2304,7 +2332,20 @@
                 <ScalarProperty Name="ID_Reserva" ColumnName="ID_Reserva" />
                 <ScalarProperty Name="EstadoReserva_ID_EstadoRes" ColumnName="EstadoReserva_ID_EstadoRes" />
                 <ScalarProperty Name="Cliente_Cedula" ColumnName="Cliente_Cedula" />
+                <ScalarProperty Name="Llegada" ColumnName="Llegada" />
+                <ScalarProperty Name="Noches" ColumnName="Noches" />
+                <ScalarProperty Name="Adultos" ColumnName="Adultos" />
+                <ScalarProperty Name="Ninos" ColumnName="Ninos" />
+                <ScalarProperty Name="Promocional" ColumnName="Promocional" />
                 <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reserva_Habitacion">
+            <EntityTypeMapping TypeName="HotelesModel.Reserva_Habitacion">
+              <MappingFragment StoreEntitySet="Reserva_Habitacion">
+                <ScalarProperty Name="Reserva_ID_Reserva" ColumnName="Reserva_ID_Reserva" />
+                <ScalarProperty Name="Habitacion_ID_Habitacion" ColumnName="Habitacion_ID_Habitacion" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2362,14 +2403,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="Reserva_Habitacion" TypeName="HotelesModel.Reserva_Habitacion" StoreEntitySet="Reserva_Habitacion">
-            <EndProperty Name="Habitacion">
-              <ScalarProperty Name="ID_Habitacion" ColumnName="Habitacion_ID_Habitacion" />
-            </EndProperty>
-            <EndProperty Name="Reserva">
-              <ScalarProperty Name="ID_Reserva" ColumnName="Reserva_ID_Reserva" />
-            </EndProperty>
-          </AssociationSetMapping>
           <AssociationSetMapping Name="Tarjeta_Cliente" TypeName="HotelesModel.Tarjeta_Cliente" StoreEntitySet="Tarjeta_Cliente">
             <EndProperty Name="Cliente">
               <ScalarProperty Name="Cedula" ColumnName="Cliente_Cedula" />
@@ -2379,6 +2412,7 @@
             </EndProperty>
           </AssociationSetMapping>
           <FunctionImportMapping FunctionImportName="sproc_hoteles_CambiarContrasena" FunctionName="HotelesModel.Store.sproc_hoteles_CambiarContrasena" />
+          <FunctionImportMapping FunctionImportName="sproc_hoteles_CambiarContrasenaCliente" FunctionName="HotelesModel.Store.sproc_hoteles_CambiarContrasenaCliente" />
           <FunctionImportMapping FunctionImportName="sproc_hoteles_DeleteActividad" FunctionName="HotelesModel.Store.sproc_hoteles_DeleteActividad" />
           <FunctionImportMapping FunctionImportName="sproc_hoteles_DeleteActividad_Compra" FunctionName="HotelesModel.Store.sproc_hoteles_DeleteActividad_Compra" />
           <FunctionImportMapping FunctionImportName="sproc_hoteles_DeleteArticulo" FunctionName="HotelesModel.Store.sproc_hoteles_DeleteArticulo" />
@@ -2401,7 +2435,6 @@
           <FunctionImportMapping FunctionImportName="sproc_hoteles_DeleteSB_Tarjeta" FunctionName="HotelesModel.Store.sproc_hoteles_DeleteSB_Tarjeta" />
           <FunctionImportMapping FunctionImportName="sproc_hoteles_DeleteTarjeta" FunctionName="HotelesModel.Store.sproc_hoteles_DeleteTarjeta" />
           <FunctionImportMapping FunctionImportName="sproc_hoteles_DeleteTarjeta_Cliente" FunctionName="HotelesModel.Store.sproc_hoteles_DeleteTarjeta_Cliente" />
-          <FunctionImportMapping FunctionImportName="sproc_hoteles_DeleteTipo_Habitacion" FunctionName="HotelesModel.Store.sproc_hoteles_DeleteTipo_Habitacion" />
           <FunctionImportMapping FunctionImportName="sproc_hoteles_DeleteUsuario" FunctionName="HotelesModel.Store.sproc_hoteles_DeleteUsuario" />
           <FunctionImportMapping FunctionImportName="sproc_hoteles_GetActividad" FunctionName="HotelesModel.Store.sproc_hoteles_GetActividad">
             <ResultMapping>
@@ -2828,8 +2861,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sproc_hoteles_GetTipo_Habitacion" FunctionName="HotelesModel.Store.sproc_hoteles_GetTipo_Habitacion" />
-          <FunctionImportMapping FunctionImportName="sproc_hoteles_GetTipo_HabitacionList" FunctionName="HotelesModel.Store.sproc_hoteles_GetTipo_HabitacionList" />
           <FunctionImportMapping FunctionImportName="sproc_hoteles_GetUsuario" FunctionName="HotelesModel.Store.sproc_hoteles_GetUsuario">
             <ResultMapping>
               <ComplexTypeMapping TypeName="HotelesModel.sproc_hoteles_GetUsuario_Result">
@@ -2890,8 +2921,17 @@
           <FunctionImportMapping FunctionImportName="sproc_hoteles_InsertSB_Tarjeta" FunctionName="HotelesModel.Store.sproc_hoteles_InsertSB_Tarjeta" />
           <FunctionImportMapping FunctionImportName="sproc_hoteles_InsertTarjeta" FunctionName="HotelesModel.Store.sproc_hoteles_InsertTarjeta" />
           <FunctionImportMapping FunctionImportName="sproc_hoteles_InsertTarjeta_Cliente" FunctionName="HotelesModel.Store.sproc_hoteles_InsertTarjeta_Cliente" />
-          <FunctionImportMapping FunctionImportName="sproc_hoteles_InsertTipo_Habitacion" FunctionName="HotelesModel.Store.sproc_hoteles_InsertTipo_Habitacion" />
           <FunctionImportMapping FunctionImportName="sproc_hoteles_InsertUsuario" FunctionName="HotelesModel.Store.sproc_hoteles_InsertUsuario" />
+          <FunctionImportMapping FunctionImportName="sproc_hoteles_LoginCliente" FunctionName="HotelesModel.Store.sproc_hoteles_LoginCliente">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HotelesModel.sproc_hoteles_LoginCliente_Result">
+                <ScalarProperty Name="cedula" ColumnName="cedula" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="primerApellido" ColumnName="primerApellido" />
+                <ScalarProperty Name="segundoApellido" ColumnName="segundoApellido" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sproc_hoteles_LoginUsuario" FunctionName="HotelesModel.Store.sproc_hoteles_LoginUsuario">
             <ResultMapping>
               <ComplexTypeMapping TypeName="HotelesModel.sproc_hoteles_LoginUsuario_Result">
@@ -2921,9 +2961,9 @@
           <FunctionImportMapping FunctionImportName="sproc_hoteles_UpdateSB_Tarjeta" FunctionName="HotelesModel.Store.sproc_hoteles_UpdateSB_Tarjeta" />
           <FunctionImportMapping FunctionImportName="sproc_hoteles_UpdateTarjeta" FunctionName="HotelesModel.Store.sproc_hoteles_UpdateTarjeta" />
           <FunctionImportMapping FunctionImportName="sproc_hoteles_UpdateTarjeta_Cliente" FunctionName="HotelesModel.Store.sproc_hoteles_UpdateTarjeta_Cliente" />
-          <FunctionImportMapping FunctionImportName="sproc_hoteles_UpdateTipo_Habitacion" FunctionName="HotelesModel.Store.sproc_hoteles_UpdateTipo_Habitacion" />
           <FunctionImportMapping FunctionImportName="sproc_hoteles_UpdateUsuario" FunctionName="HotelesModel.Store.sproc_hoteles_UpdateUsuario" />
           <FunctionImportMapping FunctionImportName="sproc_hoteles_ValidarContrasena" FunctionName="HotelesModel.Store.sproc_hoteles_ValidarContrasena" />
+          <FunctionImportMapping FunctionImportName="sproc_hoteles_ValidarContrasenaCliente" FunctionName="HotelesModel.Store.sproc_hoteles_ValidarContrasenaCliente" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -4,38 +4,39 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="52336ad60e1146b7a41f667f2e385354" Name="Diagram1">
-        <EntityTypeShape EntityType="HotelesModel.Actividad" Width="1.5" PointX="7.5" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HotelesModel.Actividad_Compra" Width="1.5" PointX="9.75" PointY="5" IsExpanded="true" />
-        <EntityTypeShape EntityType="HotelesModel.Articulo" Width="1.5" PointX="0.75" PointY="12.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HotelesModel.Articulo_Compra" Width="1.5" PointX="9.75" PointY="7.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HotelesModel.Bitacora" Width="1.5" PointX="2.75" PointY="12.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HotelesModel.Cliente" Width="1.5" PointX="3" PointY="4.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="HotelesModel.Compra" Width="1.5" PointX="7.5" PointY="4.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="HotelesModel.Consecutivo" Width="1.5" PointX="11.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HotelesModel.EasyPay" Width="1.5" PointX="10" PointY="11.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="HotelesModel.Error" Width="1.5" PointX="4.75" PointY="12.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HotelesModel.EstadoCliente" Width="1.5" PointX="0.75" PointY="5.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="HotelesModel.EstadoHabitacion" Width="1.5" PointX="11.75" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HotelesModel.EstadoReserva" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="HotelesModel.Habitacion" Width="1.5" PointX="3" PointY="8.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="HotelesModel.Precio" Width="1.5" PointX="12.75" PointY="11.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HotelesModel.Reserva" Width="1.5" PointX="5.25" PointY="4.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="HotelesModel.Rol" Width="1.5" PointX="9.75" PointY="2" IsExpanded="true" />
-        <EntityTypeShape EntityType="HotelesModel.Rol_Usuario" Width="1.5" PointX="12" PointY="1.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="HotelesModel.SB_Tarjeta" Width="1.5" PointX="7.75" PointY="11" IsExpanded="true" />
-        <EntityTypeShape EntityType="HotelesModel.Tarjeta" Width="1.5" PointX="5.25" PointY="8.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="HotelesModel.Usuario" Width="1.5" PointX="13.75" PointY="4.75" IsExpanded="true" />
+      <Diagram DiagramId="6346ee4a1b594d82bc1b62517d2a05ec" Name="Diagram1">
+        <EntityTypeShape EntityType="HotelesModel.Actividad" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HotelesModel.Actividad_Compra" Width="1.5" PointX="10" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="HotelesModel.Articulo" Width="1.5" PointX="0.75" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HotelesModel.Articulo_Compra" Width="1.5" PointX="10" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HotelesModel.Bitacora" Width="1.5" PointX="10.75" PointY="13.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HotelesModel.Cliente" Width="1.5" PointX="3" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="HotelesModel.Compra" Width="1.5" PointX="7.75" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="HotelesModel.Consecutivo" Width="1.5" PointX="12.75" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HotelesModel.EasyPay" Width="1.5" PointX="10" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HotelesModel.Error" Width="1.5" PointX="12.75" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HotelesModel.EstadoCliente" Width="1.5" PointX="0.75" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HotelesModel.EstadoHabitacion" Width="1.5" PointX="12.75" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HotelesModel.EstadoReserva" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="HotelesModel.Habitacion" Width="1.5" PointX="5.75" PointY="13.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HotelesModel.Historial_Transaccion" Width="1.5" PointX="12.75" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HotelesModel.Precio" Width="1.5" PointX="0.75" PointY="15.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HotelesModel.Reserva" Width="1.5" PointX="5.25" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="HotelesModel.Reserva_Habitacion" Width="1.5" PointX="8" PointY="14.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="HotelesModel.Rol" Width="1.5" PointX="0.75" PointY="12.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HotelesModel.Rol_Usuario" Width="1.5" PointX="3" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HotelesModel.SB_Tarjeta" Width="1.5" PointX="7.75" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HotelesModel.Tarjeta" Width="1.5" PointX="5.25" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HotelesModel.Usuario" Width="1.5" PointX="2.75" PointY="15.375" IsExpanded="true" />
         <AssociationConnector Association="HotelesModel.Actividad_Compra_Actividad" ManuallyRouted="false" />
         <AssociationConnector Association="HotelesModel.Actividad_Compra_Compra" ManuallyRouted="false" />
         <AssociationConnector Association="HotelesModel.Articulo_Compra_Compra" ManuallyRouted="false" />
         <AssociationConnector Association="HotelesModel.Cliente_EstadoCliente" ManuallyRouted="false" />
         <AssociationConnector Association="HotelesModel.Reserva_Cliente" ManuallyRouted="false" />
-        <AssociationConnector Association="HotelesModel.Compra_Reserva" ManuallyRouted="false" />
         <AssociationConnector Association="HotelesModel.EasyPay_SB_Tarjeta" ManuallyRouted="false" />
         <AssociationConnector Association="HotelesModel.Reserva_EstadoReserva" ManuallyRouted="false" />
+        <AssociationConnector Association="HotelesModel.Reserva_Habitacion_Habitacion" ManuallyRouted="false" />
         <AssociationConnector Association="HotelesModel.Rol_Usuario_Rol" ManuallyRouted="false" />
-        <AssociationConnector Association="HotelesModel.Reserva_Habitacion" ManuallyRouted="false" />
         <AssociationConnector Association="HotelesModel.Tarjeta_Cliente" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>

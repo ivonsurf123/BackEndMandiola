@@ -14,20 +14,17 @@ namespace HMandiola2.Data
     
     public partial class Reserva
     {
-        public Reserva()
-        {
-            this.Compras = new HashSet<Compra>();
-            this.Habitacions = new HashSet<Habitacion>();
-        }
-    
         public int ID_Reserva { get; set; }
         public int EstadoReserva_ID_EstadoRes { get; set; }
         public string Cliente_Cedula { get; set; }
+        public Nullable<System.DateTime> Llegada { get; set; }
+        public Nullable<int> Noches { get; set; }
+        public Nullable<int> Adultos { get; set; }
+        public Nullable<int> Ninos { get; set; }
+        public string Promocional { get; set; }
         public System.DateTime Fecha { get; set; }
     
         public virtual Cliente Cliente { get; set; }
-        public virtual ICollection<Compra> Compras { get; set; }
         public virtual EstadoReserva EstadoReserva { get; set; }
-        public virtual ICollection<Habitacion> Habitacions { get; set; }
     }
 }

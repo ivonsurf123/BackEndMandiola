@@ -56,6 +56,7 @@ namespace HMandiola2.Controllers
 
                     System.Web.HttpContext.Current.Session["usuarioLogueado"] = usuarioLogin[0];
                     System.Web.HttpContext.Current.Session["rolesUsuario"] = roles;
+					System.Web.HttpContext.Current.Session["Correo"] = usuario.Correo;
                   
                     isSuccess = true;
                 }

@@ -12,19 +12,11 @@ namespace HMandiola2.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class Compra
+    public partial class Reserva_Habitacion
     {
-        public Compra()
-        {
-            this.Actividad_Compra = new HashSet<Actividad_Compra>();
-            this.Articulo_Compra = new HashSet<Articulo_Compra>();
-        }
-    
-        public int ID_Compra { get; set; }
         public int Reserva_ID_Reserva { get; set; }
-        public System.DateTime Fecha { get; set; }
+        public int Habitacion_ID_Habitacion { get; set; }
     
-        public virtual ICollection<Actividad_Compra> Actividad_Compra { get; set; }
-        public virtual ICollection<Articulo_Compra> Articulo_Compra { get; set; }
+        public virtual Habitacion Habitacion { get; set; }
     }
 }

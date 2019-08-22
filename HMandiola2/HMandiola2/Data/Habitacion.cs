@@ -16,7 +16,7 @@ namespace HMandiola2.Data
     {
         public Habitacion()
         {
-            this.Reservas = new HashSet<Reserva>();
+            this.Reserva_Habitacion = new HashSet<Reserva_Habitacion>();
         }
     
         public int ID_Habitacion { get; set; }
@@ -29,6 +29,6 @@ namespace HMandiola2.Data
         public string Imagen { get; set; }
         public string Tipo_Habitacion { get; set; }
     
-        public virtual ICollection<Reserva> Reservas { get; set; }
+        public virtual ICollection<Reserva_Habitacion> Reserva_Habitacion { get; set; }
     }
 }

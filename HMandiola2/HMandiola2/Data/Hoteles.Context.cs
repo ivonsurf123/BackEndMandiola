@@ -42,8 +42,10 @@ namespace HMandiola2.Data
         public DbSet<EstadoHabitacion> EstadoHabitacions { get; set; }
         public DbSet<EstadoReserva> EstadoReservas { get; set; }
         public DbSet<Habitacion> Habitacions { get; set; }
+        public DbSet<Historial_Transaccion> Historial_Transaccion { get; set; }
         public DbSet<Precio> Precios { get; set; }
         public DbSet<Reserva> Reservas { get; set; }
+        public DbSet<Reserva_Habitacion> Reserva_Habitacion { get; set; }
         public DbSet<Rol> Rols { get; set; }
         public DbSet<Rol_Usuario> Rol_Usuario { get; set; }
         public DbSet<SB_Tarjeta> SB_Tarjeta { get; set; }
@@ -65,6 +67,23 @@ namespace HMandiola2.Data
                 new ObjectParameter("NuevaContrasena", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sproc_hoteles_CambiarContrasena", correoParameter, contrasenaParameter, nuevaContrasenaParameter, isPasswordChanged);
+        }
+    
+        public virtual int sproc_hoteles_CambiarContrasenaCliente(string correo, string contrasena, string nuevaContrasena, ObjectParameter isPasswordChanged)
+        {
+            var correoParameter = correo != null ?
+                new ObjectParameter("correo", correo) :
+                new ObjectParameter("correo", typeof(string));
+    
+            var contrasenaParameter = contrasena != null ?
+                new ObjectParameter("contrasena", contrasena) :
+                new ObjectParameter("contrasena", typeof(string));
+    
+            var nuevaContrasenaParameter = nuevaContrasena != null ?
+                new ObjectParameter("NuevaContrasena", nuevaContrasena) :
+                new ObjectParameter("NuevaContrasena", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sproc_hoteles_CambiarContrasenaCliente", correoParameter, contrasenaParameter, nuevaContrasenaParameter, isPasswordChanged);
         }
     
         public virtual int sproc_hoteles_DeleteActividad(Nullable<int> iD_Actividad)
@@ -275,15 +294,6 @@ namespace HMandiola2.Data
                 new ObjectParameter("Cliente_Cedula", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sproc_hoteles_DeleteTarjeta_Cliente", cliente_CedulaParameter);
-        }
-    
-        public virtual int sproc_hoteles_DeleteTipo_Habitacion(string iD_TipoHab)
-        {
-            var iD_TipoHabParameter = iD_TipoHab != null ?
-                new ObjectParameter("ID_TipoHab", iD_TipoHab) :
-                new ObjectParameter("ID_TipoHab", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sproc_hoteles_DeleteTipo_Habitacion", iD_TipoHabParameter);
         }
     
         public virtual int sproc_hoteles_DeleteUsuario(string cedula)
@@ -655,24 +665,6 @@ namespace HMandiola2.Data
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sproc_hoteles_GetTarjetaList_Result>("sproc_hoteles_GetTarjetaList", num_TarjetaParameter);
         }
     
-        public virtual int sproc_hoteles_GetTipo_Habitacion(string iD_TipoHab)
-        {
-            var iD_TipoHabParameter = iD_TipoHab != null ?
-                new ObjectParameter("ID_TipoHab", iD_TipoHab) :
-                new ObjectParameter("ID_TipoHab", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sproc_hoteles_GetTipo_Habitacion", iD_TipoHabParameter);
-        }
-    
-        public virtual int sproc_hoteles_GetTipo_HabitacionList(string iD_TipoHab)
-        {
-            var iD_TipoHabParameter = iD_TipoHab != null ?
-                new ObjectParameter("ID_TipoHab", iD_TipoHab) :
-                new ObjectParameter("ID_TipoHab", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sproc_hoteles_GetTipo_HabitacionList", iD_TipoHabParameter);
-        }
-    
         public virtual ObjectResult<sproc_hoteles_GetUsuario_Result> sproc_hoteles_GetUsuario(string cedula)
         {
             var cedulaParameter = cedula != null ?
@@ -985,7 +977,7 @@ namespace HMandiola2.Data
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sproc_hoteles_InsertPrecio", tipoMonedaParameter, montoParameter, es_HabitacionParameter);
         }
     
-        public virtual int sproc_hoteles_InsertReserva(Nullable<int> estadoReserva_ID_EstadoRes, string cliente_Cedula, Nullable<System.DateTime> fecha)
+        public virtual int sproc_hoteles_InsertReserva(Nullable<int> estadoReserva_ID_EstadoRes, string cliente_Cedula, Nullable<System.DateTime> llegada, Nullable<int> noches, Nullable<int> adultos, Nullable<int> ninos, string promocional, Nullable<System.DateTime> fecha)
         {
             var estadoReserva_ID_EstadoResParameter = estadoReserva_ID_EstadoRes.HasValue ?
                 new ObjectParameter("EstadoReserva_ID_EstadoRes", estadoReserva_ID_EstadoRes) :
@@ -995,11 +987,31 @@ namespace HMandiola2.Data
                 new ObjectParameter("Cliente_Cedula", cliente_Cedula) :
                 new ObjectParameter("Cliente_Cedula", typeof(string));
     
+            var llegadaParameter = llegada.HasValue ?
+                new ObjectParameter("Llegada", llegada) :
+                new ObjectParameter("Llegada", typeof(System.DateTime));
+    
+            var nochesParameter = noches.HasValue ?
+                new ObjectParameter("Noches", noches) :
+                new ObjectParameter("Noches", typeof(int));
+    
+            var adultosParameter = adultos.HasValue ?
+                new ObjectParameter("Adultos", adultos) :
+                new ObjectParameter("Adultos", typeof(int));
+    
+            var ninosParameter = ninos.HasValue ?
+                new ObjectParameter("Ninos", ninos) :
+                new ObjectParameter("Ninos", typeof(int));
+    
+            var promocionalParameter = promocional != null ?
+                new ObjectParameter("Promocional", promocional) :
+                new ObjectParameter("Promocional", typeof(string));
+    
             var fechaParameter = fecha.HasValue ?
                 new ObjectParameter("Fecha", fecha) :
                 new ObjectParameter("Fecha", typeof(System.DateTime));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sproc_hoteles_InsertReserva", estadoReserva_ID_EstadoResParameter, cliente_CedulaParameter, fechaParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sproc_hoteles_InsertReserva", estadoReserva_ID_EstadoResParameter, cliente_CedulaParameter, llegadaParameter, nochesParameter, adultosParameter, ninosParameter, promocionalParameter, fechaParameter);
         }
     
         public virtual int sproc_hoteles_InsertRol(string descripcion)
@@ -1091,19 +1103,6 @@ namespace HMandiola2.Data
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sproc_hoteles_InsertTarjeta_Cliente", cliente_CedulaParameter, tarjeta_Num_TarjetaParameter);
         }
     
-        public virtual int sproc_hoteles_InsertTipo_Habitacion(string iD_TipoHab, string descripcion)
-        {
-            var iD_TipoHabParameter = iD_TipoHab != null ?
-                new ObjectParameter("ID_TipoHab", iD_TipoHab) :
-                new ObjectParameter("ID_TipoHab", typeof(string));
-    
-            var descripcionParameter = descripcion != null ?
-                new ObjectParameter("Descripcion", descripcion) :
-                new ObjectParameter("Descripcion", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sproc_hoteles_InsertTipo_Habitacion", iD_TipoHabParameter, descripcionParameter);
-        }
-    
         public virtual int sproc_hoteles_InsertUsuario(string cedula, string nombre, string primerApellido, string segundoApellido, string correo, string contrasena, string preguntaSeguridad, string respuestaSeguridad)
         {
             var cedulaParameter = cedula != null ?
@@ -1139,6 +1138,19 @@ namespace HMandiola2.Data
                 new ObjectParameter("RespuestaSeguridad", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sproc_hoteles_InsertUsuario", cedulaParameter, nombreParameter, primerApellidoParameter, segundoApellidoParameter, correoParameter, contrasenaParameter, preguntaSeguridadParameter, respuestaSeguridadParameter);
+        }
+    
+        public virtual ObjectResult<sproc_hoteles_LoginCliente_Result> sproc_hoteles_LoginCliente(string correo, string contrasena)
+        {
+            var correoParameter = correo != null ?
+                new ObjectParameter("correo", correo) :
+                new ObjectParameter("correo", typeof(string));
+    
+            var contrasenaParameter = contrasena != null ?
+                new ObjectParameter("contrasena", contrasena) :
+                new ObjectParameter("contrasena", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sproc_hoteles_LoginCliente_Result>("sproc_hoteles_LoginCliente", correoParameter, contrasenaParameter);
         }
     
         public virtual ObjectResult<sproc_hoteles_LoginUsuario_Result> sproc_hoteles_LoginUsuario(string correo, string contrasena)
@@ -1589,19 +1601,6 @@ namespace HMandiola2.Data
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sproc_hoteles_UpdateTarjeta_Cliente", cliente_CedulaParameter, tarjeta_Num_TarjetaParameter);
         }
     
-        public virtual int sproc_hoteles_UpdateTipo_Habitacion(string iD_TipoHab, string descripcion)
-        {
-            var iD_TipoHabParameter = iD_TipoHab != null ?
-                new ObjectParameter("ID_TipoHab", iD_TipoHab) :
-                new ObjectParameter("ID_TipoHab", typeof(string));
-    
-            var descripcionParameter = descripcion != null ?
-                new ObjectParameter("Descripcion", descripcion) :
-                new ObjectParameter("Descripcion", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sproc_hoteles_UpdateTipo_Habitacion", iD_TipoHabParameter, descripcionParameter);
-        }
-    
         public virtual int sproc_hoteles_UpdateUsuario(string cedula, string nombre, string primerApellido, string segundoApellido, string correo, string contrasena, string preguntaSeguridad, string respuestaSeguridad)
         {
             var cedulaParameter = cedula != null ?
@@ -1650,6 +1649,19 @@ namespace HMandiola2.Data
                 new ObjectParameter("contrasena", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sproc_hoteles_ValidarContrasena", correoParameter, contrasenaParameter, isPasswordValid);
+        }
+    
+        public virtual int sproc_hoteles_ValidarContrasenaCliente(string correo, string contrasena, ObjectParameter isPasswordValid)
+        {
+            var correoParameter = correo != null ?
+                new ObjectParameter("correo", correo) :
+                new ObjectParameter("correo", typeof(string));
+    
+            var contrasenaParameter = contrasena != null ?
+                new ObjectParameter("contrasena", contrasena) :
+                new ObjectParameter("contrasena", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sproc_hoteles_ValidarContrasenaCliente", correoParameter, contrasenaParameter, isPasswordValid);
         }
     }
 }
